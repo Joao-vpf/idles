@@ -36,7 +36,7 @@ document.addEventListener('keydown', (event) => {
 			}
             else
             {
-
+				
 				vida-=1;
                 const newContainer = document.createElement('div');
                 newContainer.className = 'blocks-container';
@@ -66,11 +66,15 @@ document.addEventListener('keydown', (event) => {
 						// se a letra não foi colorida mais vezes do que aparece na palavra x
 						if(countInBlocks < countInX && block.style.backgroundColor === '') {
 							// colore o bloco de amarelo
+							block.classList.add('yshake');
 							block.style.backgroundColor = 'yellow';
 						}
 					}
 					if(block.style.backgroundColor === '') // se o bloco não foi pintado
+					{
+						block.classList.add('rshake');
 						block.style.backgroundColor = '#ccc'; // adiciona uma sombra escura
+					}
 				});
 				
 				if (vida > 0)
