@@ -1,0 +1,27 @@
+.game{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 10vh;
+}
+
+
+.blocks-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-block {
+    border: 1px solid #44bbff;
+    margin: 5px;
+    padding: 10px;
+    width: 50px;
+    text-align: center;
+}
+
+body
+{
+    background-color:   #ADD8E6;
+}
