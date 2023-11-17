@@ -25,55 +25,54 @@ document.addEventListener('keydown', (event) => {
         {
 			
             if (word === x) 
-            {
+            {//Animação e finalização dos blocos ao acertar a palavra
 				blocks.forEach((block, index) => {
-					setTimeout(() => { // Adiciona um atraso antes de executar o código
-						block.contentEditable = false; // torna os blocos não editáveis
-						block.style.backgroundColor = 'green';
+					setTimeout(() => { 
+						block.contentEditable = false; 
+						block.style.backgroundColor = '#00a471';
 						block.classList.add('onda');
-					}, index * 40); // Multiplica o índice por 500 milissegundos (0.5 segundos)
+					}, index * 40); 
 				});
 			}
             else
-            {
-				
+            {//errou a palavra
+
 				vida-=1;
+                //criar um novo container
                 const newContainer = document.createElement('div');
                 newContainer.className = 'blocks-container';
-                for(let i=0; i<5; i++){
+                for(let i=1; i<=5; i++){
                     const newBlock = document.createElement('div');
                     newBlock.className = 'input-block';
-                    newBlock.id = `${i+1}`;
+                    newBlock.id = `${i}`;
                     newBlock.contentEditable = true;
                     newContainer.appendChild(newBlock);
                 }
                 
+                //pintar no bloco novas cores
 				blocks.forEach(block => {
-					block.contentEditable = false; // torna os blocos não editáveis
+					block.contentEditable = false;
 					if(block.textContent === x[parseInt(block.id)-1]) 
-						block.style.backgroundColor = 'green';
+						block.style.backgroundColor = '#00a471';
 				});
 				
 				blocks.forEach(block => {
-					// se o bloco contém uma letra que está na palavra x
-					if(x.includes(block.textContent)) {
-						// conta quantas vezes essa letra aparece na palavra x
-						const countInX = Array.from(x).filter(letter => letter === block.textContent).length;
-
-						// conta quantas vezes essa letra já foi colorida de amarelo
-						const countInBlocks = Array.from(blocks).filter(b => b.textContent === block.textContent && (b.style.backgroundColor === 'yellow' || b.style.backgroundColor === 'green')  ).length;
-
-						// se a letra não foi colorida mais vezes do que aparece na palavra x
-						if(countInBlocks < countInX && block.style.backgroundColor === '') {
-							// colore o bloco de amarelo
+					if(x.includes(block.textContent)) 
+                    {
+                        const countInX = Array.from(x).filter(letter => letter === block.textContent).length;
+                        const countInBlocks = Array.from(blocks).filter(b => b.textContent === block.textContent && (window.getComputedStyle(b).backgroundColor === '#f9f494' || window.getComputedStyle(b).backgroundColor === '#00a471')).length;
+                        console.log(countInX+" "+countInBlocks + " " +  window.getComputedStyle(block).backgroundColor )
+						if(countInBlocks < countInX && window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)') 
+                        {
 							block.classList.add('yshake');
-							block.style.backgroundColor = 'yellow';
+							block.style.backgroundColor = '#f9f494';
 						}
 					}
-					if(block.style.backgroundColor === '') // se o bloco não foi pintado
+					if(window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)')
 					{
+                        console.log("entrei")
 						block.classList.add('rshake');
-						block.style.backgroundColor = '#ccc'; // adiciona uma sombra escura
+						block.style.backgroundColor = '#e87f7f'; 
 					}
 				});
 				
