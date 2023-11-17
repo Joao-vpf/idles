@@ -61,7 +61,7 @@ document.addEventListener('keydown', (event) => {
                     {
                         const countInX = Array.from(x).filter(letter => letter === block.textContent).length;
                         const countInBlocks = Array.from(blocks).filter(b => b.textContent === block.textContent && (window.getComputedStyle(b).backgroundColor === '#f9f494' || window.getComputedStyle(b).backgroundColor === '#00a471')).length;
-                        console.log(countInX+" "+countInBlocks + " " +  window.getComputedStyle(block).backgroundColor )
+                        
 						if(countInBlocks < countInX && window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)') 
                         {
 							block.classList.add('yshake');
@@ -70,7 +70,6 @@ document.addEventListener('keydown', (event) => {
 					}
 					if(window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)')
 					{
-                        console.log("entrei")
 						block.classList.add('rshake');
 						block.style.backgroundColor = '#e87f7f'; 
 					}
