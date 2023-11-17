@@ -1,3 +1,5 @@
+let vida = 7;
+
 document.addEventListener('keydown', (event) => {
     const block = event.target;
     if (!block.classList.contains('input-block')) {
@@ -7,24 +9,35 @@ document.addEventListener('keydown', (event) => {
     const blocks = Array.from(block.parentNode.children);
     const index = blocks.indexOf(block);
     const key = event.key;
+	
+	if (key.length === 1 && !key.match(/[a-z]/i)) {
+        event.preventDefault();
+        return;
+    }
+
 
     if (key === 'Enter') 
     {
         const word = blocks.map(block => block.textContent).join('');
-        const x = 'fruta'
+        const x = 'MANGA'
         
         if (word.length === 5)
         {
 			
             if (word === x) 
             {
-				blocks.forEach(block => {
-					block.contentEditable = false; // torna os blocos não editáveis
-					block.style.backgroundColor = 'green';
+				blocks.forEach((block, index) => {
+					setTimeout(() => { // Adiciona um atraso antes de executar o código
+						block.contentEditable = false; // torna os blocos não editáveis
+						block.style.backgroundColor = 'green';
+						block.classList.add('onda');
+					}, index * 40); // Multiplica o índice por 500 milissegundos (0.5 segundos)
 				});
-            }
+			}
             else
             {
+
+				vida-=1;
                 const newContainer = document.createElement('div');
                 newContainer.className = 'blocks-container';
                 for(let i=0; i<5; i++){
@@ -51,25 +64,27 @@ document.addEventListener('keydown', (event) => {
 						const countInBlocks = Array.from(blocks).filter(b => b.textContent === block.textContent && (b.style.backgroundColor === 'yellow' || b.style.backgroundColor === 'green')  ).length;
 
 						// se a letra não foi colorida mais vezes do que aparece na palavra x
-						if(countInBlocks < countInX) {
+						if(countInBlocks < countInX && block.style.backgroundColor === '') {
 							// colore o bloco de amarelo
 							block.style.backgroundColor = 'yellow';
 						}
 					}
-					 if(block.style.backgroundColor === '') // se o bloco não foi pintado
+					if(block.style.backgroundColor === '') // se o bloco não foi pintado
 						block.style.backgroundColor = '#ccc'; // adiciona uma sombra escura
 				});
 				
-				
-				 
-                document.body.appendChild(newContainer);
+				if (vida > 0)
+				{
+					document.body.appendChild(newContainer);
+					newContainer.children[0].focus();
+				}
             }
         }
     }
 
     if (key.length === 1 && key.match(/\S/)) 
     {
-        blocks[index].textContent = key;
+        blocks[index].textContent = key.toUpperCase();
         if (index < blocks.length - 1) 
             blocks[index + 1].focus();
     } 
@@ -96,4 +111,16 @@ document.addEventListener('click', (event) => {
     if (block.classList.contains('input-block') && block.getAttribute('contentEditable') == 'false') {
         event.preventDefault();
     }
+});
+
+document.addEventListener('copy', (event) => {
+    event.preventDefault();
+});
+
+document.addEventListener('paste', (event) => {
+    event.preventDefault();
+});
+
+document.addEventListener('cut', (event) => {
+    event.preventDefault();
 });
