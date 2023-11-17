@@ -79,3 +79,42 @@ body
 .onda {
   animation: onda 0.5s;
 }
+
+@keyframes rshake {
+  0% { transform: translate(1px, 0) rotate(5deg); }
+  10% { transform: translate(-1px, 0) rotate(-5deg); }
+  20% { transform: translate(-2px, 0) rotate(5deg); }
+  30% { transform: translate(2px, 0) rotate(-5deg); }
+  40% { transform: translate(1px, 0) rotate(5deg); }
+  50% { transform: translate(-1px, 0) rotate(-5deg); }
+  60% { transform: translate(-2px, 0) rotate(5deg); }
+  70% { transform: translate(2px, 0) rotate(-5deg); }
+  80% { transform: translate(-1px, 0) rotate(5deg); }
+  90% { transform: translate(1px, 0) rotate(-5deg); }
+  100% { transform: translate(1px, 0) rotate(5deg); }
+}
+
+
+.rshake {
+  animation: rshake 0.8s;
+}
+
+
+@keyframes yshake {
+  0% { transform: translate(1px, 0) rotate(2deg); }
+  10% { transform: translate(-1px, 0) rotate(-2deg); }
+  20% { transform: translate(-2px, 0) rotate(2deg); }
+  30% { transform: translate(2px, 0) rotate(-2deg); }
+  40% { transform: translate(1px, 0) rotate(2deg); }
+  50% { transform: translate(-1px, 0) rotate(-2deg); }
+  60% { transform: translate(-2px, 0) rotate(2deg); }
+  70% { transform: translate(2px, 0) rotate(-2deg); }
+  80% { transform: translate(-1px, 0) rotate(2deg); }
+  90% { transform: translate(1px, 0) rotate(-2deg); }
+  100% { transform: translate(1px, 0) rotate(2deg); }
+}
+
+
+.yshake {
+  animation: yshake 0.5s;
+}
