@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script defer src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+</head>
+<body>
+	<div class = "game" >
+		<wc-header class="menu">
+			<h1>
+				<slot> Idles </slot>
+			</h1>
+			<div class="perfil-container">
+				<div class="perfil-icon" id="perfilIcon"></div>
+				<div class="perfil-menu" id="perfilMenu">
+					<div class="perfil-block" id="perfilBlock" style="display: none;">
+						<!-- Adicione os elementos do perfil menu aqui (por exemplo, botão histórico e configurações) -->
+						<h1 id = "username_perfil">username</h1>
+						<button type="button" id="historicoButton">Histórico</button>
+						<button type="button" id="configuracoesButton">Configurações</button>
+					</div>
+					<div class="login-block" id="loginBlock"  style="display: block";>
+						<form>
+							
+							<input type="text" id="username" name="username" placeholder="Login">
+							<input type="password" id="password" name="password" placeholder="Senha">
+
+							<div class="button-container">
+								<button type="button"  id="loginButton">Login</button>
+								<button type="button"  class="criar-conta" id="criarContaButton">Criar Conta</button>
+							</div>
+
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</wc-header>
+		<div class="alert" id="alert1">
+			
+		</div>
+		<div class="life">
+			<div class="heart" id="heart1">❤️</div>
+			<div class="heart" id="heart2">❤️</div>
+			<div class="heart" id="heart3">❤️</div>
+			<div class="heart" id="heart4">❤️</div>
+			<div class="heart" id="heart5">❤️</div>
+			<div class="heart" id="heart6">❤️</div>
+			<div class="heart" id="heart7">❤️</div>
+		</div>
+		<div class="blocks-container">
+			<div class="input-block" id="1" contenteditable="true"></div>
+			<div class="input-block" id="2" contenteditable="true"></div>
+			<div class="input-block" id="3" contenteditable="true"></div>
+			<div class="input-block" id="4" contenteditable="true"></div>
+			<div class="input-block" id="5" contenteditable="true"></div>
+		</div>
+		<div id="player-container">
+			<div id="player"></div>
+		</div>
+    </div>
+	
+</body>
+</html>
