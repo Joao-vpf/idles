@@ -226,6 +226,16 @@ button:hover {
 animation: onda 0.5s;
 }
 
+@keyframes shake {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: translate(-2px, 0) rotate(0deg); }
+  20%, 40%, 60%, 80% { transform: translate(2px, 0) rotate(0deg); }
+}
+
+.shake {
+  animation: shake 0.5s ease-in-out 0.05s;
+}
+
 @keyframes rshake {
 0%, 100% { transform: translate(1px, 0) rotate(5deg); }
 10%, 90% { transform: translate(-1px, 0) rotate(-5deg); }

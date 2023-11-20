@@ -80,14 +80,43 @@ document.addEventListener('keydown', (event) => {
 
 function checkWord(blocks) {
     const word = blocks.map(block => block.textContent).join('');
-    if (word.length === 5) {
-        if (word === x) {
-            animateBlocks(blocks);
-        } else {
-            removeheart();
-            vida -= 1;
-            handleWrongWord(blocks);
-        }
+    if (word.length === 5) 
+    {
+        fetch('/check_word', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                word: word,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.data)
+            if(data.data == 1)
+            {
+                removealert();
+                if (word === x) 
+                {
+                    animateBlocks(blocks);
+                } 
+                else 
+                {
+                    removeheart();
+                    vida -= 1;
+                    handleWrongWord(blocks);
+                }            
+            }
+            else
+            {
+                customAlert("Não existe essa palavra no banco de dados.")
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao verificar a palavra:', error);
+        });
+
     }
 }
 
@@ -127,9 +156,7 @@ function handleWrongWord(blocks) {
             if(countInBlocks < countInX && window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)') 
             {
                 block.classList.add('yshake');
-                block.style.transition = 'background-color 0.3s ease';
                 block.style.backgroundColor = 'rgb(249, 244, 148)';
-                console.log(countInX+" "+ countInBlocks+" " +window.getComputedStyle(block).backgroundColor )
             }
             else
             {
@@ -160,11 +187,19 @@ function handleWrongWord(blocks) {
         customAlert("A palavra era: " + x)
     }
 }
+
+
+function removealert()
+{
+    var alertBox = document.getElementById('alert1');
+    alertBox.style.opacity = "0";
+}
+
 function customAlert(msg) {
     // Cria um novo elemento div
     var alertBox = document.getElementById('alert1');
     
-    alertBox.style.opacity = "1"
+    alertBox.style.opacity = "1";
 
     // Define o texto do alerta
     alertBox.textContent = msg;
@@ -247,7 +282,6 @@ function login(event) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data.data)
         if(data.data == 1)
         {
             conf_login(username);
