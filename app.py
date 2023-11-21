@@ -10,7 +10,7 @@ def check_word_from_database(verif):
     with get_db_connection() as connection:
         print(verif)
         cursor = connection.cursor()
-        consulta = "SELECT COUNT(*) FROM palavras WHERE palavra = ? GROUP BY palavra"
+        consulta = "SELECT palavra FROM palavras WHERE palavra = ?"
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
         print(resultados)
@@ -56,7 +56,7 @@ def get_login():
 @app.route('/check_word', methods=['POST'])
 def check_word():
     data = request.get_json()
-    conf = check_word_from_database(verif=(data.get("word")).lower())
+    conf = check_word_from_database(verif=(data.get("word")))
     return jsonify({'data': conf})
 
 if __name__ == '__main__':
