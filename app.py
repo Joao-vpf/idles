@@ -11,6 +11,7 @@ def check_word_from_database(verif):
         print(verif)
         cursor = connection.cursor()
         consulta = "SELECT palavra FROM palavras WHERE palavra = ?"
+        verif.upper()
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
         print(resultados)
@@ -30,7 +31,7 @@ def get_word_from_database():
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
         cursor = connection.cursor()
-        consulta = "SELECT COUNT(*) FROM user WHERE login=? AND password=?;"
+        consulta = "SELECT COUNT(*) FROM user WHERE username=? AND password=?;"
         cursor.execute(consulta, (login, password))
         resultados = cursor.fetchall()
         print(resultados[0][0])
