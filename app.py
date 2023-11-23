@@ -41,6 +41,7 @@ def get_login_from_database(login, password):
 def get_username_from_database(login):
      with get_db_connection() as connection:
         cursor = connection.cursor()
+        login.lower()
         consulta = "SELECT count(*) FROM user WHERE username=?;"
         cursor.execute(consulta, (login))
         resultados = cursor.fetchall()
@@ -51,8 +52,9 @@ def get_username_from_database(login):
 def insert_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_username_from_database(login):
+            login.lower()
             cursor = connection.cursor()
-            consulta = "inser into user(username,password) values(?,?);"
+            consulta = "insert into user(username,password) values(?,?);"
             cursor.execute(consulta, (login, password))
             return 1
         return -1
@@ -60,6 +62,7 @@ def insert_login_in_database(login, password):
 def delete_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
+            login.lower()
             cursor = connection.cursor()
             consulta = "delete from user WHERE username=?;"
             cursor.execute(consulta, (login, password))
@@ -69,6 +72,7 @@ def delete_login_in_database(login, password):
 def update_login_username_database(login, password,newlogin):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
+            login.lower()
             cursor = connection.cursor()
             consulta = "update user set usermane =? where username=?;"
             cursor.execute(consulta, (newlogin, login))
@@ -78,6 +82,7 @@ def update_login_username_database(login, password,newlogin):
 def update_login_senha_database(login, password,newpassword):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
+            login.lower()
             cursor = connection.cursor()
             consulta = "update user set password=? where username=?;"
             cursor.execute(consulta, (newpassword, login))
