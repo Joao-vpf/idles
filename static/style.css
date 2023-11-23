@@ -5,21 +5,25 @@ body {
 
 /* Game Styles */
 .game {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	position:relative;
+	z-index: 99999999;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 /* Menu Styles */
 .menu {
-  height: 15vh;   
-   max-width: 720px;
-  width: 100%;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 5vh 5vh 1fr 5vh 5vh;
-  grid-gap: 0;
+	position:relative;
+	z-index: 200;
+	height: 15vh;   
+	max-width: 720px;
+	width: 100%;
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: 5vh 5vh 1fr 5vh 5vh;
+	grid-gap: 0;
 }
 
 .menu h1{
@@ -45,7 +49,6 @@ body {
   justify-content: center;
   width: 40px;
   height: 40px;
-  z-index: 100;
   border-radius: 50%;
   z-index: 100;
 }
@@ -57,7 +60,6 @@ body {
   cursor: pointer;
 }    
     
-
 .perfil-menu {
 	grid-column: 5;
 	display: none;
@@ -68,7 +70,7 @@ body {
 	background-color: #fff;
 	border-radius: 5px;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-	z-index: 99999;
+	z-index: 150;
 }
 
 .login-block
@@ -125,7 +127,7 @@ input[type="submit"] {
   right: 15.5px;
 }
 
-button {
+#perfilMenu button {
   padding: 5px;
   margin: 2px;
   background-color: #2d65d5;
@@ -135,11 +137,11 @@ button {
   cursor: pointer;
 }
 
-.criar-conta{
+#perfilMenu .criar-conta{
   background-color: #4b1c8d;
 }
 
-button:hover {
+#perfilMenu button:hover {
   background: #005f6b;
 }
 
@@ -155,13 +157,62 @@ button:hover {
   font-size: 1em;
 }
 
+/* Info perfil */
+
+.info-perfil{
+	display: block;
+	position: absolute;
+	top: 100px;
+	width: 450px;
+	height: 480px;
+	border-radius: 7%;
+	background-color: #fff;
+	z-index: 150;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.info-config{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
+}
+
+#infoconfig h2{
+	font-size: 1.3em;
+}
+
+#infoconfig input{
+  outline: none;
+  width: 100px; 
+  padding: 8px; 
+}
+
+#infoconfig button {
+  padding: 10px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#infoconfig button:hover {
+  background: #005f6b;
+}
+
+.Config-header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
 
 /* Alerta */
 
 .alert {
   outline: none;
   opacity: 0;
-  z-index: 20000;
+  z-index: 100;
   background-color: rgba(0, 95, 107, 0.3);
   font-family: 'Mitr', sans-serif;
   color: #ffffff; /* Changed from white to #ffffff for better visibility */
@@ -178,7 +229,6 @@ button:hover {
   text-shadow: 1px 1px 1.5px rgba(0, 0, 0,0.3); 
 }
 
-
 /*Life Styles */
 .life{
   justify-content: center;
@@ -189,6 +239,15 @@ button:hover {
 /*Heart Styles */
 .heart{
   padding: 10.5px;
+}
+
+/* Main */
+
+.main
+{
+	position:relative;
+	z-index: 1;
+	display: block;
 }
 
 /* Blocks Container Styles */
@@ -294,8 +353,6 @@ animation: yshake 0.5s;
 .grow {
   animation: grow 0.3s;
 }
-
-
 
 /* Easter eggs */
 

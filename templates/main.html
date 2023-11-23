@@ -10,6 +10,8 @@
 </head>
 <body>
 	<div class = "game" >
+		
+		
 		<wc-header class="menu">
 			<h1>
 				<slot> Idles </slot>
@@ -24,6 +26,7 @@
 							<button type="button" id="historicoButton">Histórico</button>
 							<button type="button" id="configuracoesButton">Configurações</button>
 						</div>
+						
 					</div>
 					<div class="login-block" id="loginBlock">
 						<form>
@@ -39,32 +42,72 @@
 						</form>
 					</div>
 				</div>
-			</div>
 
 		</wc-header>
-		<div class="alert" id="alert1">
+		
+		
+		<div class = "info-perfil" id ="infoperfil">
+			<div class="info-menu" id = "infomenu">
+				<div class="info-config" id = "infoconfig">
+					
+					<wc-header class="Config-header">
+						<h1>Configurações</h1>
+					</wc-header>
+					
+					<div class="Alter-image">
+						<h2>Alter imagem de perfil:</h2>
+					</div>
+					<div class="Alter-nome">
+						<h2>Alterar nome de usuario:</h2>
+						<input type="text" id="old_username" name="old_username" placeholder="Login atual">
+						<input type="password" id="alter1_password" name="password" placeholder="Senha">
+						<input type="text" id="new_username" name="new_username" placeholder="Novo login">
+						<button type="button"  id="alter1_but">Alterar</button>
+					</div>
+					<div class="Alter-senha">
+						<h2>Alterar senha:</h2>
+						<input type="text" id="alter2_username" name="alter2_username" placeholder="Login">
+						<input type="password" id="old_password" name="old_password" placeholder="Senha antiga">
+						<input type="password" id="new_password" name="new_password" placeholder="Nova senha">
+						<button type="button"  id="alter2_but">Alterar</button>
+					</div>
+					<div class="Delete-conta">
+						<h2>Deletar conta:</h2>
+						<input type="text" id="alter_username" name="username" placeholder="Login">
+						<input type="password" id="alter3_password" name="password" placeholder="Senha">
+						<button type="button"  id="del_but">Deletar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class = "main">
+			<div class="alert" id="alert1"></div>
 			
-		</div>
-		<div class="life">
-			<div class="heart" id="heart1">❤️</div>
-			<div class="heart" id="heart2">❤️</div>
-			<div class="heart" id="heart3">❤️</div>
-			<div class="heart" id="heart4">❤️</div>
-			<div class="heart" id="heart5">❤️</div>
-			<div class="heart" id="heart6">❤️</div>
-			<div class="heart" id="heart7">❤️</div>
-		</div>
-		<div class="blocks-container">
-			<div class="input-block" id="1" contenteditable="true"></div>
-			<div class="input-block" id="2" contenteditable="true"></div>
-			<div class="input-block" id="3" contenteditable="true"></div>
-			<div class="input-block" id="4" contenteditable="true"></div>
-			<div class="input-block" id="5" contenteditable="true"></div>
-		</div>
-		<div id="player-container">
+			<div class="life">
+				<div class="heart" id="heart1">❤️</div>
+				<div class="heart" id="heart2">❤️</div>
+				<div class="heart" id="heart3">❤️</div>
+				<div class="heart" id="heart4">❤️</div>
+				<div class="heart" id="heart5">❤️</div>
+				<div class="heart" id="heart6">❤️</div>
+				<div class="heart" id="heart7">❤️</div>
+			</div>
+			
+			<div class="blocks-container">
+				<div class="input-block" id="1" contenteditable="true"></div>
+				<div class="input-block" id="2" contenteditable="true"></div>
+				<div class="input-block" id="3" contenteditable="true"></div>
+				<div class="input-block" id="4" contenteditable="true"></div>
+				<div class="input-block" id="5" contenteditable="true"></div>
+			</div>
+			
+			<div id="player-container">
 			<div id="player"></div>
+	</div>
 		</div>
-    </div>
+		
+		
 	
 </body>
 </html>
