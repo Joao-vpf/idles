@@ -299,7 +299,31 @@ function login(event) {
 
 function criarConta(event)
 {
-	
+	//alterar aqui
+    fetch('/get_login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.data == 1)
+        {
+            conf_login(username);
+        }
+        else
+        {
+            alert('Login falhou. Verifique suas credenciais.');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
 }
 
 function conf_login(username)
