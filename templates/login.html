@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .login-container {
+            width: 300px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .tab button {
+            padding: 10px;
+            width: 100px;
+            cursor: pointer;
+            border: none;
+            outline: none;
+            border-radius: 5px;
+            background-color: #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .tab button:hover {
+            background-color: #ccc;
+        }
+
+        .tab button.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        .login-form {
+            display: none;
+        }
+
+        .login-form.active {
+            display: block;
+        }
+    </style>
+    <script>
+        function toggleTab(tabName) {
+            var tabs = document.querySelectorAll('.tab button');
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove('active');
+            }
+
+            var forms = document.querySelectorAll('.login-form');
+            for (var i = 0; i < forms.length; i++) {
+                forms[i].classList.remove('active');
+            }
+
+            document.querySelector('.tab button[data-tab="' + tabName + '"]').classList.add('active');
+            document.querySelector('.login-form[data-form="' + tabName + '"]').classList.add('active');
+        }
+    </script>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="tab">
+        <button onclick="toggleTab('login')" class="active" data-tab="login">Login</button>
+        <button onclick="toggleTab('register')" data-tab="register">Register</button>
+    </div>
+
+    <form class="login-form active" data-form="login">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <form class="login-form" data-form="register">
+        <label for="newUsername">New Username:</label>
+        <input type="text" id="newUsername" name="newUsername" required>
+
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword" required>
+
+        <button type="submit">Register</button>
+    </form>
+</div>
+
+</body>
+</html>
