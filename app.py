@@ -31,12 +31,59 @@ def get_word_from_database():
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
         cursor = connection.cursor()
-        consulta = "SELECT COUNT(*) FROM user WHERE username=? AND password=?;"
+        consulta = "SELECT count(*) FROM user WHERE username=? AND password=?;"
+        login.lower()
         cursor.execute(consulta, (login, password))
         resultados = cursor.fetchall()
         print(resultados[0][0])
         return resultados[0][0]
+    
+def get_username_from_database(login):
+     with get_db_connection() as connection:
+        cursor = connection.cursor()
+        consulta = "SELECT count(*) FROM user WHERE username=?;"
+        cursor.execute(consulta, (login))
+        resultados = cursor.fetchall()
+        if resultados:
+            return -1
+        return 1
+    
+def insert_login_in_database(login, password):
+    with get_db_connection() as connection:
+        if get_username_from_database(login):
+            cursor = connection.cursor()
+            consulta = "inser into user(username,password) values(?,?);"
+            cursor.execute(consulta, (login, password))
+            return 1
+        return -1
+    
+def delete_login_in_database(login, password):
+    with get_db_connection() as connection:
+        if get_login_from_database(login,password):
+            cursor = connection.cursor()
+            consulta = "delete from user WHERE username=?;"
+            cursor.execute(consulta, (login, password))
+            return 1
+        return -1        
 
+def update_login_username_database(login, password,newlogin):
+    with get_db_connection() as connection:
+        if get_login_from_database(login,password):
+            cursor = connection.cursor()
+            consulta = "update user set usermane =? where username=?;"
+            cursor.execute(consulta, (newlogin, login))
+            return 1
+        return -1
+
+def update_login_senha_database(login, password,newpassword):
+    with get_db_connection() as connection:
+        if get_login_from_database(login,password):
+            cursor = connection.cursor()
+            consulta = "update user set password=? where username=?;"
+            cursor.execute(consulta, (newpassword, login))
+            return 1
+        return -1
+    
 @app.route('/')
 def index():
     return render_template('main.html')
