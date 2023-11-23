@@ -261,6 +261,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 // Adiciona eventos aos botões
+// document.getElementById('historicoButton').addEventListener('click',  hist);
+document.getElementById('configuracoesButton').addEventListener('click', config);
 document.getElementById("loginButton").addEventListener("click", login);
 document.getElementById("criarContaButton").addEventListener("click", criarConta);
 
@@ -301,6 +303,7 @@ function login(event)
 
 function criarConta(event)
 {
+    event.preventDefault(); 
 	//alterar aqui
     fetch('/get_login', {
         method: 'POST',
@@ -345,18 +348,17 @@ function conf_login(username)
 
 }
 
-function criarConta(event) {
+
+function config(event)
+{
+	console.log("oi");
     event.preventDefault(); 
-    
+    if(document.getElementById('infoperfil').style.display == 'none')
+		document.getElementById('infoperfil').style.display = 'block';
+	else
+		document.getElementById('infoperfil').style.display = 'none';
+		
 }
-
-document.getElementById('historicoButton').addEventListener('click', function () {
-    alert('Histórico clicado. Adicione sua lógica aqui.');
-});
-
-document.getElementById('configuracoesButton').addEventListener('click', function () {
-    alert('Configurações clicadas. Adicione sua lógica aqui.');
-});
 
 
 /* easter eggs */
