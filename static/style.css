@@ -53,12 +53,13 @@ body {
 .perfil-icon {
   width: 40px;
   height: 40px;
-  background-color: #3498db;
   border-radius: 50%;
   cursor: pointer;
 }
 
 .perfil-menu {
+  justify-content: center;
+  align-items: center;
   display: none;
   position: absolute;
   top: 50px; 
@@ -160,6 +161,8 @@ button:hover {
 
 /*Life Styles */
 .life{
+  justify-content: center;
+  align-items: center;
   display: flex;
 }
 
