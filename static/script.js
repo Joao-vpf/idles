@@ -297,6 +297,11 @@ function login(event) {
    
 }
 
+function criarConta(event)
+{
+	
+}
+
 function conf_login(username)
 {
     document.getElementById('username_perfil').textContent = username;
