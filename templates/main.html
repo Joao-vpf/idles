@@ -15,10 +15,9 @@
 				<slot> Idles </slot>
 			</h1>
 			<div class="perfil-container">
-				<div class="perfil-icon" id="perfilIcon"></div>
+				<img src="{{ url_for('static', filename='png/login_icon.png') }}" id="perfilIcon"></div>
 				<div class="perfil-menu" id="perfilMenu">
 					<div class="perfil-block" id="perfilBlock" style="display: none;">
-						<!-- Adicione os elementos do perfil menu aqui (por exemplo, botão histórico e configurações) -->
 						<h1 id = "username_perfil">username</h1>
 						<button type="button" id="historicoButton">Histórico</button>
 						<button type="button" id="configuracoesButton">Configurações</button>
