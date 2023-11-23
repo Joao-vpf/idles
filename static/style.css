@@ -55,28 +55,48 @@ body {
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
-}
+}    
+    
 
 .perfil-menu {
-  justify-content: center;
-  align-items: center;
-  display: none;
-  position: absolute;
-  top: 50px; 
-  width: 200px;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	grid-column: 5;
+	display: none;
+	position: relative;
+    right: 95px;
+	width: 200px;
+	padding: 15px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	z-index: 99999;
 }
 
-.perfil-menu.show-menu {
+.login-block
+{
   display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.perfil-block
+{
+  display: none;
+  justify-content: center;
+  align-items: center;
+  
+}
+
+.button-container-perfil
+{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 form {
   text-align: center; 
 }
+
 /* Reduza o tamanho dos campos de input */
 #username,
 #password {
@@ -124,7 +144,7 @@ button:hover {
 }
 
 /* Apos login */
-
+-block
 .perfil-block {
   display: flex;
   flex-direction: column; 
@@ -281,4 +301,7 @@ animation: yshake 0.5s;
 
 #player-container {
   display: none; /* Inicialmente, oculta o player */
+ 
+  justify-content: center;
+  align-items: center;
 }

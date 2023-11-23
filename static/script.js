@@ -248,13 +248,14 @@ document.addEventListener("DOMContentLoaded", function () {
     var loginMenu = document.getElementById("perfilMenu");
 
     loginIcon.addEventListener("click", function () {
-        loginMenu.classList.toggle("show-menu");
-    });
-
-    document.addEventListener("click", function (event) {
-        if (!loginIcon.contains(event.target) && !loginMenu.contains(event.target)) {
-            loginMenu.classList.remove("show-menu");
+		if (loginMenu.style.display=="block" ) 
+		{
+            loginMenu.style.display = "none";
         }
+        else
+        {
+			loginMenu.style.display = "block";
+		}
     });
 });
 
@@ -263,7 +264,8 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("loginButton").addEventListener("click", login);
 document.getElementById("criarContaButton").addEventListener("click", criarConta);
 
-function login(event) {
+function login(event) 
+{
     event.preventDefault(); 
     
     var username = document.getElementById("username").value;
@@ -330,7 +332,7 @@ function conf_login(username)
 {
     document.getElementById('username_perfil').textContent = username;
     document.getElementById('loginBlock').style.display = 'none';
-    document.getElementById('perfilBlock').style.display = 'flex';
+    document.getElementById('perfilBlock').style.display = 'block';
 
     switch(username)
     {
@@ -372,7 +374,7 @@ function onYouTubeIframeAPIReady(ok) {
                 'onReady': function (event) {
                     event.target.playVideo();
 
-                    playerContainer.style.display = 'block';
+                    playerContainer.style.display = 'flex';
                 },
                 'onStateChange': function (event) {
                     console.log('Estado do Player:', event.data);

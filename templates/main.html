@@ -17,12 +17,15 @@
 			<div class="perfil-container">
 				<img src="{{ url_for('static', filename='png/login_icon.png') }}" id="perfilIcon"></div>
 				<div class="perfil-menu" id="perfilMenu">
-					<div class="perfil-block" id="perfilBlock" style="display: none;">
+					<div class="perfil-block" id="perfilBlock">
 						<h1 id = "username_perfil">username</h1>
-						<button type="button" id="historicoButton">Histórico</button>
-						<button type="button" id="configuracoesButton">Configurações</button>
+						
+						<div class="button-container-perfil">
+							<button type="button" id="historicoButton">Histórico</button>
+							<button type="button" id="configuracoesButton">Configurações</button>
+						</div>
 					</div>
-					<div class="login-block" id="loginBlock"  style="display: block";>
+					<div class="login-block" id="loginBlock">
 						<form>
 							
 							<input type="text" id="username" name="username" placeholder="Login">
