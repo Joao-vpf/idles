@@ -200,7 +200,13 @@ input[type="submit"] {
 
 
 #infoconfig .del_but{
+	background: #f5f2f2;
+	color: #f73636
+}
+
+#infoconfig .del_but:hover{
 	background: #f73636;
+	color: #fa9696;
 }
 
 .Config-header{
