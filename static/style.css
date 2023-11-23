@@ -141,9 +141,6 @@ input[type="submit"] {
   background-color: #4b1c8d;
 }
 
-#perfilMenu button:hover {
-  background: #005f6b;
-}
 
 /* Apos login */
 -block
@@ -164,11 +161,11 @@ input[type="submit"] {
 	position: absolute;
 	top: 100px;
 	width: 450px;
-	height: 480px;
+	height: 485px;
 	border-radius: 7%;
 	background-color: #fff;
 	z-index: 150;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .info-config{
@@ -185,6 +182,10 @@ input[type="submit"] {
   outline: none;
   width: 100px; 
   padding: 8px; 
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 #infoconfig button {
@@ -197,8 +198,9 @@ input[type="submit"] {
   cursor: pointer;
 }
 
-#infoconfig button:hover {
-  background: #005f6b;
+
+#infoconfig .del_but{
+	background: #f73636;
 }
 
 .Config-header{

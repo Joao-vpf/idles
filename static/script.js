@@ -14,7 +14,8 @@ var last_block = -1;
 
 document.addEventListener('keydown', (event) => {
     block = event.target;
-    if (last_block !== -1 && (event.key === 'Backspace' || event.key ===  'ArrowLeft' || event.key === 'Enter'))
+    console.log(document.activeElement);
+    if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT')|| event.key ===  'ArrowLeft' || event.key === 'Enter'))
     {
         block = last_block;
         last_block = -1;
@@ -94,7 +95,7 @@ function checkWord(blocks) {
         .then(response => response.json())
         .then(data => {
             console.log(data.data)
-            if(data.data == 1)
+            if(data.data === 1)
             {
                 removealert();
                 if (word === x) 
@@ -223,7 +224,7 @@ function createNewContainer() {
 
 document.addEventListener('click', (event) => {
     const block = event.target;
-    if (block.classList.contains('input-block') && block.getAttribute('contentEditable') == 'false') {
+    if (block.classList.contains('input-block') && block.getAttribute('contentEditable') === 'false') {
         event.preventDefault();
     }
 });
@@ -248,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var loginMenu = document.getElementById("perfilMenu");
 
     loginIcon.addEventListener("click", function () {
-		if (loginMenu.style.display=="block" ) 
+		if (loginMenu.style.display==="block" ) 
 		{
             loginMenu.style.display = "none";
         }
@@ -262,11 +263,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Adiciona eventos aos botões
 // document.getElementById('historicoButton').addEventListener('click',  hist);
-document.getElementById('configuracoesButton').addEventListener('click', config);
 document.getElementById("loginButton").addEventListener("click", login);
-document.getElementById("criarContaButton").addEventListener("click", criarConta);
 
-function login(event) 
+async function login(event) 
 {
     event.preventDefault(); 
     
@@ -274,7 +273,7 @@ function login(event)
     var password = document.getElementById("password").value;
 
 
-    fetch('/get_login', {
+    await fetch('/get_login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -301,11 +300,12 @@ function login(event)
    
 }
 
-function criarConta(event)
+document.getElementById("criarContaButton").addEventListener("click", criarConta);
+async function criarConta(event)
 {
     event.preventDefault(); 
 	//alterar aqui
-    fetch('/get_login', {
+   await fetch('/get_login', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -317,7 +317,7 @@ function criarConta(event)
     })
     .then(response => response.json())
     .then(data => {
-        if(data.data == 1)
+        if(data.data === 1)
         {
             conf_login(username);
         }
@@ -331,10 +331,10 @@ function criarConta(event)
     });
 }
 
-function conf_login(username)
+async function conf_login(username)
 {
     document.getElementById('username_perfil').textContent = username;
-    document.getElementById('loginBlock').style.display = 'none';
+    document.getElementById('loginBlock').remove();
     document.getElementById('perfilBlock').style.display = 'block';
 
     switch(username)
@@ -349,14 +349,18 @@ function conf_login(username)
 }
 
 
-function config(event)
+document.getElementById('configuracoesButton').addEventListener('click', config);
+async function config(event)
 {
-	console.log("oi");
     event.preventDefault(); 
-    if(document.getElementById('infoperfil').style.display == 'none')
-		document.getElementById('infoperfil').style.display = 'block';
-	else
+    if(document.getElementById('infoperfil').style.display === 'block')
+    {
 		document.getElementById('infoperfil').style.display = 'none';
+	}
+	else
+	{
+		document.getElementById('infoperfil').style.display = 'block';
+	}
 		
 }
 
