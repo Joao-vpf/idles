@@ -1,9 +1,12 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, session, render_template, jsonify, request
 from flask_login import LoginManager,login_manager, UserMixin, login_user, login_required, logout_user, current_user
+from datetime import timedelta
 import sqlite3
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
+app.secret_key = 'pato'
+#app.permanent_session_lifetime = timedelta(minutes=1)
 
 
 class User(UserMixin):
@@ -24,7 +27,7 @@ def check_word_from_database(verif):
         print(verif)
         cursor = connection.cursor()
         consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
-        verif.upper()
+        verif=verif.upper()
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
         print(resultados)
@@ -45,27 +48,26 @@ def get_login_from_database(login, password):
     with get_db_connection() as connection:
         cursor = connection.cursor()
         consulta = "SELECT count(*) FROM user WHERE username=? AND password=?;"
-        login.lower()
+        login=login.lower()
         cursor.execute(consulta, (login, password))
         resultados = cursor.fetchall()
-        print(resultados[0][0])
         return resultados[0][0]
     
 def get_username_from_database(login):
      with get_db_connection() as connection:
         cursor = connection.cursor()
-        login.lower()
+        login=login.lower()
         consulta = "SELECT count(*) FROM user WHERE username=?;"
         cursor.execute(consulta, (login,))
         resultados = cursor.fetchall()
-        if resultados:
+        if resultados[0][0] == 1:
             return -1
         return 1
     
 def insert_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_username_from_database(login) == 1:
-            login.lower()
+            login=login.lower()
             cursor = connection.cursor()
             consulta = "insert into user(username,password) values(?,?);"
             cursor.execute(consulta, (login, password))
@@ -75,7 +77,7 @@ def insert_login_in_database(login, password):
 def delete_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
-            login.lower()
+            login=login.lower()
             cursor = connection.cursor()
             consulta = "delete from user WHERE username=?;"
             cursor.execute(consulta, (login, password))
@@ -85,7 +87,7 @@ def delete_login_in_database(login, password):
 def update_login_username_database(login, password,newlogin):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
-            login.lower()
+            login=login.lower()
             cursor = connection.cursor()
             consulta = "update user set usermane =? where username=?;"
             cursor.execute(consulta, (newlogin, login))
@@ -95,7 +97,7 @@ def update_login_username_database(login, password,newlogin):
 def update_login_senha_database(login, password,newpassword):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
-            login.lower()
+            login=login.lower()
             cursor = connection.cursor()
             consulta = "update user set password=? where username=?;"
             cursor.execute(consulta, (newpassword, login))
@@ -117,6 +119,13 @@ def get_login():
     username = data.get('username')
     password = data.get('password')
     conf = get_login_from_database(login=username, password=password)
+    
+    if conf == 1:
+        user = User()
+        user.id = username
+        login_user(user, remember=True)  # make the session permanent
+        session['logged_in'] = True  # set session variable
+        
     return jsonify({'data': conf})
 
 @app.route('/check_word', methods=['POST'])
@@ -133,11 +142,13 @@ def set_conta():
     password = data.get('password')
     conf = insert_login_in_database(login=username, password=password)
     
-    if conf == 1:
-        user = User()
-        user.id = username
-        login_user(user)
-        
+    
+   # if conf == 1:
+      #  user = User()
+       # user.id = username
+       # login_user(user)
+    
+    
     return jsonify({'data': conf})
 
 @app.route('/logout')
@@ -147,4 +158,4 @@ def logout():
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=True)
+    app.run(host='0.0.0.0',debug=False)

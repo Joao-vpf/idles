@@ -1,3 +1,10 @@
+if (document.cookie.indexOf('session=') >= 0) {
+    console.log("logado")
+} else {
+    console.log("nao esta logado")
+}
+
+
 var vida = 7;
 
 var x;
@@ -14,7 +21,6 @@ var last_block = -1;
 
 document.addEventListener('keydown', (event) => {
     block = event.target;
-    console.log(document.activeElement);
     if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT')|| event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
     {
         block = last_block;
@@ -379,15 +385,34 @@ document.getElementById('confirmarcriar').addEventListener('click', confirmarcri
 async function confirmarcriarconta(event)
 {
     event.preventDefault(); 
-    var username = document.getElementById("usernamecriarconta").value;
-    var password = document.getElementById("passwordcriarconta").value;
-    var passwordrep = document.getElementById("passwordcriarcontarep").value;
-    console.log(username, " ", password, " ", passwordrep)
+    const username = document.getElementById("usernamecriarconta").value;
+    const password = document.getElementById("passwordcriarconta").value;
+    const passwordrep = document.getElementById("passwordcriarcontarep").value;
+    
+    document.getElementById("usernamecriarconta").value ="";
+    document.getElementById("passwordcriarconta").value ="";
+    document.getElementById("passwordcriarcontarep").value ="";
+
+    var aux = username.replace(/\s/, '');
+    if(aux=="")
+    {
+        alert('Usuario deve ter algum caractere além do espaço.');
+        return -1;
+    }
+
     if(password !== passwordrep)
     {
         alert('Senhas não estao iguais. Verifique novamente.');
         return -1;
     }
+
+    if(password.length < 6)
+    {
+        alert('A senha deve ter mais que 6 caracteres.');
+        return -1;
+        
+    }
+   
 
     await fetch('/set_conta', {
         method: 'POST',
@@ -409,6 +434,7 @@ async function confirmarcriarconta(event)
         else
         {
             alert('Cadastro concluido com sucesso.');
+            voltarcriar({ preventDefault: () => {} });
         }
     })
     .catch(error => {
