@@ -1,8 +1,20 @@
 from flask import Flask, render_template, jsonify, request
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask_login import LoginManager,login_manager, UserMixin, login_user, login_required, logout_user, current_user
 import sqlite3
 
 app = Flask(__name__)
+login_manager = LoginManager(app)
+
+
+class User(UserMixin):
+    pass
+
+# Função para carregar usuário a partir do ID (usada pelo Flask-Login)
+@login_manager.user_loader
+def load_user(user_id):
+    user = User()
+    user.id = user_id
+    return user
 
 def get_db_connection():
     return sqlite3.connect('banco.db')
@@ -120,7 +132,19 @@ def set_conta():
     username = data.get('username')
     password = data.get('password')
     conf = insert_login_in_database(login=username, password=password)
+    
+    if conf == 1:
+        user = User()
+        user.id = username
+        login_user(user)
+        
     return jsonify({'data': conf})
 
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return 'Você foi desconectado. <a href="/">Página inicial</a>.'
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0',debug=True)

@@ -401,9 +401,14 @@ async function confirmarcriarconta(event)
     })
     .then(response => response.json())
     .then(data => {
-        if(data.data !== 1)
+        console.log(data)
+        if(data.data === -1)
         {
             alert('Nome de usario já existente.');
+        }
+        else
+        {
+            alert('Cadastro concluido com sucesso.');
         }
     })
     .catch(error => {
