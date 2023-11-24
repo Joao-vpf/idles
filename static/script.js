@@ -1,7 +1,8 @@
-if (document.cookie.indexOf('session=') >= 0) {
-    console.log("logado")
-} else {
-    console.log("nao esta logado")
+window.onload = function() {
+    var username = localStorage.getItem('username');
+    if (username) {
+        conf_login(username);
+    }
 }
 
 
@@ -322,6 +323,7 @@ async function login(event)
     .then(data => {
         if(data.data === 1)
         {
+            localStorage.setItem('username', username);
             conf_login(username);
         }
         else
