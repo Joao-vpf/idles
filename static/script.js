@@ -1,12 +1,33 @@
+
+var vida = 7;
 window.onload = function() {
     var username = localStorage.getItem('username');
     if (username) {
         conf_login(username);
+        vida = localStorage.getItem('vida');
+        console.log(vida);
+
+        for(var i=7; i>=0; i--)
+        {
+            var palavra= localStorage.getItem(`wordl ${i}`);
+            console.log(palavra);
+            if(palavra)
+            {
+                var block = document.getElementsByClassName("input-block");
+                const blocks = Array.from(block.parentNode.children);
+                blocks[0] = palavra[0];
+                blocks[1] = palavra[1];
+                blocks[2] = palavra[2];
+                blocks[3] = palavra[3];
+                blocks[4] = palavra[4];
+                checkWord(blocks);
+            
+            }
+        }
     }
 }
 
 
-var vida = 7;
 
 var x;
 if (x===undefined)
@@ -115,6 +136,7 @@ document.addEventListener('keydown', (event) => {
     event.preventDefault();
 });
 
+
 function checkWord(blocks) {
     const word = blocks.map(block => block.textContent).join('');
     if (word.length === 5) 
@@ -133,6 +155,8 @@ function checkWord(blocks) {
             console.log(data.data)
             if(data.data === 1)
             {
+                localStorage.setItem(`wordl ${vida}`,word);
+                localStorage.setItem("vida",vida);
                 removealert();
                 if (word === x) 
                 {
@@ -462,6 +486,56 @@ async function config(event)
 		document.getElementById('infoperfil').style.display = 'block';
 	}
 		
+}
+
+document.getElementById('del_but').addEventListener('click', deletecount);
+
+async function deletecount(event)
+{
+
+    const username = document.getElementById("alter_username").value;
+    const password = document.getElementById("alter3_password").value;
+   
+    document.getElementById("alter_username").value ="";
+    document.getElementById("alter3_password").value ="";
+
+    event.preventDefault(); 
+    await fetch('/del_conta', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        if(data.data === -1)
+        {
+            alert('Senha ou nome de usuario estão errados.');
+        }
+        else
+        {
+            alert('A conta foi deleta com sucesso.');
+            localStorage.removeItem('username');
+            window.location.reload(); 
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
+
+}
+
+document.getElementById('perfilsair').addEventListener('click', sairconta);
+
+async function sairconta(event)
+{
+    localStorage.removeItem('username');
+    window.location.reload(); 
 }
 
 /* easter eggs */

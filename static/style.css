@@ -85,15 +85,27 @@ body {
   display: none;
   justify-content: center;
   align-items: center;
+  position: relative;
   
 }
 
 .button-container-perfil
 {
-  display: flex;
   justify-content: center;
   align-items: center;
+  display: grid;
 }
+
+#buttoncontainerperfil .perfilsair{
+  background: #eea1a1;
+	color: #f73636
+}
+
+#buttoncontainerperfil .perfilsair:hover{
+	background: #f73636;
+	color: #eea1a1;
+}
+
 
 form {
   text-align: center; 

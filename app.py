@@ -6,7 +6,6 @@ import sqlite3
 app = Flask(__name__)
 login_manager = LoginManager(app)
 app.secret_key = 'pato'
-#app.permanent_session_lifetime = timedelta(minutes=1)
 
 
 class User(UserMixin):
@@ -76,10 +75,10 @@ def insert_login_in_database(login, password):
     
 def delete_login_in_database(login, password):
     with get_db_connection() as connection:
-        if get_login_from_database(login,password):
+        if get_login_from_database(login, password) == 1:
             login=login.lower()
             cursor = connection.cursor()
-            consulta = "delete from user WHERE username=?;"
+            consulta = "delete from user WHERE username=? and password=?;"
             cursor.execute(consulta, (login, password))
             return 1
         return -1        
@@ -119,12 +118,6 @@ def get_login():
     username = data.get('username')
     password = data.get('password')
     conf = get_login_from_database(login=username, password=password)
-    
-    if conf == 1:
-        user = User()
-        user.id = username
-        login_user(user, remember=True)  # make the session permanent
-        session['logged_in'] = True  # set session variable
         
     return jsonify({'data': conf})
 
@@ -137,17 +130,18 @@ def check_word():
 @app.route('/set_conta', methods=['POST'])
 def set_conta():
     data = request.get_json()
-    print(data)
     username = data.get('username')
     password = data.get('password')
     conf = insert_login_in_database(login=username, password=password)
     
-    
-   # if conf == 1:
-      #  user = User()
-       # user.id = username
-       # login_user(user)
-    
+    return jsonify({'data': conf})
+
+@app.route('/del_conta', methods=['POST'])
+def del_conta():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    conf = delete_login_in_database(login=username, password=password)
     
     return jsonify({'data': conf})
 
