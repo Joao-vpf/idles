@@ -13,6 +13,7 @@ window.onload = function() {
             console.log(palavra);
             if(palavra)
             {
+                //!arrumar isso daqui
                 var block = document.getElementsByClassName("input-block");
                 const blocks = Array.from(block.parentNode.children);
                 blocks[0] = palavra[0];
