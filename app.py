@@ -1,4 +1,5 @@
 from flask import Flask, render_template, jsonify, request
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import sqlite3
 
 app = Flask(__name__)
@@ -10,7 +11,7 @@ def check_word_from_database(verif):
     with get_db_connection() as connection:
         print(verif)
         cursor = connection.cursor()
-        consulta = "SELECT palavra FROM palavras WHERE palavra = ?"
+        consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
         verif.upper()
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
@@ -43,7 +44,7 @@ def get_username_from_database(login):
         cursor = connection.cursor()
         login.lower()
         consulta = "SELECT count(*) FROM user WHERE username=?;"
-        cursor.execute(consulta, (login))
+        cursor.execute(consulta, (login,))
         resultados = cursor.fetchall()
         if resultados:
             return -1
@@ -51,7 +52,7 @@ def get_username_from_database(login):
     
 def insert_login_in_database(login, password):
     with get_db_connection() as connection:
-        if get_username_from_database(login):
+        if get_username_from_database(login) == 1:
             login.lower()
             cursor = connection.cursor()
             consulta = "insert into user(username,password) values(?,?);"
@@ -110,6 +111,15 @@ def get_login():
 def check_word():
     data = request.get_json()
     conf = check_word_from_database(verif=(data.get("word")))
+    return jsonify({'data': conf})
+
+@app.route('/set_conta', methods=['POST'])
+def set_conta():
+    data = request.get_json()
+    print(data)
+    username = data.get('username')
+    password = data.get('password')
+    conf = insert_login_in_database(login=username, password=password)
     return jsonify({'data': conf})
 
 if __name__ == '__main__':

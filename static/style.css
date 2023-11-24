@@ -108,23 +108,21 @@ form {
 }
 
 /* Estilize o botão de login, se desejar */
-input[type="submit"] {
-  margin-bottom: 10px;
+#loginBlock input {
+  outline: none;
   width: 100px; 
-  padding: 10px; 
-  background-color: #3498db;
-  color: #fff;
-  border: none;
+  padding: 8px; 
+  margin: 5px;
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.button-container {
-  margin: 2px;
+#loginBlock button-container {
   position: relative;
   justify-content:right;
   display: flex;
-  right: 15.5px;
 }
 
 #perfilMenu button {
@@ -141,6 +139,38 @@ input[type="submit"] {
   background-color: #4b1c8d;
 }
 
+
+/* Cria conta  */
+
+#perfilMenu .criar-conta-block{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
+  text-align: -webkit-center;
+}
+
+
+#criarcontaBlock input{
+  outline: none;
+  width: 100px; 
+  padding: 8px; 
+  margin: 5px;
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
+  border-radius: 5px;
+  cursor: pointer;
+  display: list-item;
+}
+
+#criarcontaBlock button{
+  padding: 5px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
 /* Apos login */
 -block
@@ -206,7 +236,7 @@ input[type="submit"] {
 
 #infoconfig .del_but:hover{
 	background: #f73636;
-	color: #fa9696;
+	color: #fbe3e3;
 }
 
 .Config-header{

@@ -15,12 +15,41 @@ var last_block = -1;
 document.addEventListener('keydown', (event) => {
     block = event.target;
     console.log(document.activeElement);
-    if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT')|| event.key ===  'ArrowLeft' || event.key === 'Enter'))
+    if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT')|| event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
     {
         block = last_block;
         last_block = -1;
     }
 
+    if((event.key === 'Enter' &&  document.activeElement.tagName === 'INPUT'))
+    { 
+        var currentDiv = document.activeElement.closest('div');
+
+        var inputElements = Array.from(currentDiv.querySelectorAll('input'));
+
+        var currentIndex = inputElements.indexOf(document.activeElement);
+
+        var nextIndex = currentIndex + 1;
+
+        if (nextIndex === inputElements.length) 
+        {
+            switch (currentDiv.id)
+            {
+                case "loginBlock":
+                    login({ preventDefault: () => {} });
+                    return 0;
+                case "criarcontaBlock":  
+                    confirmarcriarconta({ preventDefault: () => {} });
+                    return 0;
+                default:
+                    return -1;
+            }
+        }
+
+        inputElements[nextIndex].focus();
+
+        return 0;
+    }
 
     if (!block.classList.contains('input-block')) {
         return;
@@ -285,38 +314,6 @@ async function login(event)
     })
     .then(response => response.json())
     .then(data => {
-        if(data.data == 1)
-        {
-            conf_login(username);
-        }
-        else
-        {
-            alert('Login falhou. Verifique suas credenciais.');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao enviar a solicitação:', error);
-    });
-   
-}
-
-document.getElementById("criarContaButton").addEventListener("click", criarConta);
-async function criarConta(event)
-{
-    event.preventDefault(); 
-	//alterar aqui
-   await fetch('/get_login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password,
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
         if(data.data === 1)
         {
             conf_login(username);
@@ -329,6 +326,7 @@ async function criarConta(event)
     .catch(error => {
         console.error('Erro ao enviar a solicitação:', error);
     });
+   
 }
 
 async function conf_login(username)
@@ -349,6 +347,75 @@ async function conf_login(username)
 }
 
 
+/* Criar conta */
+
+
+document.getElementById("criarContaButton").addEventListener("click", criarConta);
+
+async function criarConta(event)
+{
+    event.preventDefault(); 
+    
+	document.getElementById('criarcontaBlock').style.display = 'block';
+    document.getElementById('loginBlock').style.display = 'none';
+}
+
+
+document.getElementById("voltarcriar").addEventListener("click", voltarcriar);
+
+async function voltarcriar(event)
+{
+    event.preventDefault(); 
+    
+	document.getElementById('criarcontaBlock').style.display ='none';
+    document.getElementById('loginBlock').style.display =  'block';
+}
+
+
+
+
+
+document.getElementById('confirmarcriar').addEventListener('click', confirmarcriarconta);
+async function confirmarcriarconta(event)
+{
+    event.preventDefault(); 
+    var username = document.getElementById("usernamecriarconta").value;
+    var password = document.getElementById("passwordcriarconta").value;
+    var passwordrep = document.getElementById("passwordcriarcontarep").value;
+    console.log(username, " ", password, " ", passwordrep)
+    if(password !== passwordrep)
+    {
+        alert('Senhas não estao iguais. Verifique novamente.');
+        return -1;
+    }
+
+    await fetch('/set_conta', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.data !== 1)
+        {
+            alert('Nome de usario já existente.');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
+}
+
+
+
+/* POS LOGIN*/
+
+
 document.getElementById('configuracoesButton').addEventListener('click', config);
 async function config(event)
 {
@@ -363,7 +430,6 @@ async function config(event)
 	}
 		
 }
-
 
 /* easter eggs */
 
