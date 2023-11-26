@@ -543,7 +543,7 @@ document.addEventListener('click', function (event) {
         
         if (!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
         {
-            abrirmenulogin()
+            perfilMenu.style.display = 'none';
         }
     }
 });
