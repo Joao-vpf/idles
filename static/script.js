@@ -167,8 +167,10 @@ function animateBlocks(blocks) {
             block.style.transition = 'background-color 0.1s ease';
             block.style.backgroundColor = 'rgb(0, 164, 113)';
             block.classList.add('onda');
+            adicionar_letra_bloco(3, block.textContent);
         }, index * 40); 
     });
+    adicionar_letra_bloco(4, "");
 }
 
 function removeheart()
@@ -183,6 +185,7 @@ function handleWrongWord(blocks) {
         if(block.textContent === x[parseInt(block.id)-1]) 
         {   
             block.style.backgroundColor = 'rgb(0, 164, 113)';
+            adicionar_letra_bloco(3, block.textContent);
         }
     });
     
@@ -197,6 +200,7 @@ function handleWrongWord(blocks) {
             {
                 block.classList.add('yshake');
                 block.style.backgroundColor = 'rgb(249, 244, 148)';
+                adicionar_letra_bloco(2, block.textContent);
             }
             else
             {
@@ -205,6 +209,7 @@ function handleWrongWord(blocks) {
                     block.classList.add('rshake');
                     block.style.transition = 'background-color 0.5s ease';
                     block.style.backgroundColor = 'rgb(232, 127, 127)'; 
+                    adicionar_letra_bloco(1, block.textContent);
                 }
             }
         }
@@ -215,6 +220,7 @@ function handleWrongWord(blocks) {
                 block.classList.add('rshake');
                 block.style.transition = 'background-color 0.5s ease';
                 block.style.backgroundColor = 'rgb(232, 127, 127)'; 
+                adicionar_letra_bloco(1, block.textContent);
             }
         }
     });
@@ -226,6 +232,57 @@ function handleWrongWord(blocks) {
     {
         customAlert("A palavra era: " + x)
     }
+}
+
+function adicionar_letra_bloco(tipo, letra) 
+{
+    var h;
+
+    if (tipo === 1) 
+    {
+        h = document.querySelector('.letras_des');
+    } else if (tipo === 2) 
+    {
+        h = document.querySelector('.letras_enc');
+        if (document.querySelector('.letras_cer').textContent.includes(letra))
+         {
+            return -1;
+        }
+    } else if (tipo === 3) {
+        h = document.querySelector('.letras_cer');
+        if (document.querySelector('.letras_enc').textContent.includes(letra)) 
+        {
+            var letrasEncArray = document.querySelector('.letras_enc').textContent.split(', ');
+            var indexEnc = letrasEncArray.indexOf(letra);
+            if (indexEnc !== -1) {
+                letrasEncArray.splice(indexEnc, 1);
+                document.querySelector('.letras_enc').textContent = letrasEncArray.join(', ').slice(1);
+            }
+        }
+    } else {
+        h = document.querySelector('.letras_des');
+        h.textContent = ""; 
+        return -1;
+    }
+
+    var conteudoAtual = h.textContent;
+
+    var letrasArray = conteudoAtual.split(', ');
+
+    if (letrasArray.includes(letra) || document.querySelector('.letras_enc').textContent.includes(letra) || document.querySelector('.letras_cer').textContent.includes(letra)) {
+        console.log("Esta letra já está em um tipo diferente.");
+        return -1;
+    }
+
+    letrasArray.push(letra);
+
+    letrasArray = [...new Set(letrasArray)];
+
+    letrasArray.sort();
+
+    h.textContent = letrasArray.join(', ').slice(1);
+
+    return 1;
 }
 
 
@@ -250,15 +307,18 @@ function customAlert(msg) {
 function createNewContainer() {
     const newContainer = document.createElement('div');
     newContainer.className = 'blocks-container';
-    for(let i=1; i<=5; i++){
+    for (let i = 1; i <= 5; i++) {
         const newBlock = document.createElement('div');
         newBlock.className = 'input-block';
         newBlock.id = `${i}`;
         newBlock.contentEditable = true;
         newContainer.appendChild(newBlock);
     }
-    document.body.appendChild(newContainer);
-    newContainer.children[0].focus();
+    
+    const mainDiv = document.querySelector('.all_blocks');
+    mainDiv.appendChild(newContainer.cloneNode(true));
+
+    mainDiv.lastElementChild.children[0].focus();
 }
 
 document.addEventListener('click', (event) => {
@@ -557,7 +617,6 @@ async function alter_senha(event)
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if(data.data === -1)
         {
             alert('Senha ou nome de usuario estão errados.');
@@ -578,7 +637,6 @@ document.getElementById('alter1_but').addEventListener('click', alter_user);
 
 async function alter_user(event)
 {
-    console.log("Oi");
     const username = document.getElementById("old_username").value;
     const password = document.getElementById("alter1_password").value;
     const new_username = document.getElementById("new_username").value;
@@ -614,7 +672,6 @@ async function alter_user(event)
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if(data.data === -1)
         {
             alert('Senha ou nome de usuario estão errados.');

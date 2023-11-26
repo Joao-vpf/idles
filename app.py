@@ -175,4 +175,5 @@ def logout():
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080,debug=False)
+    #app.run(host='0.0.0.0', port=8080,debug=False)
+    app.run(debug=True)
