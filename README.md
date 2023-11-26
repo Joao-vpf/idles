@@ -1,4 +1,15 @@
-# Idles
+# IDLES
+O IDLES é um projeto de um site que visa simplificar a busca por jogos "idle", reunindo uma ampla variedade deles em um único local. Proporcionamos uma experiência mais rápida e prática na busca por esses jogos.
+
+## Equipe:
+
+<div>
+  
+  [<img src="https://avatars.githubusercontent.com/u/98399932?v=4" alt="João Victor Porto" width="100">](https://github.com/Joao-vpf)
+  [<img src="https://avatars.githubusercontent.com/u/101851627?v=4" alt="João Henrique" width="100">](https://github.com/Yattez)
+  
+</div>
+
 
 ## Requisitos
 1. O python ou python3
@@ -83,4 +94,9 @@ Obs: Sendo o primeiro ip o jogo rodando unicamente em seu computador e o segundo
 Abra um navegador da web e cole o link copiado. Isso abrirá o aplicativo no navegador.
 
 ### 10. Aproveite!
-Agora, você deve estar pronto para usar o seu aplicativo. Explore as funcionalidades conforme necessário e divirta-se!
+Agora, você deve estar pronto para usar o seu mavegador. Explore as funcionalidades conforme necessário e divirta-se!
+
+## Idles implementados:
+
+### Palavras
+
