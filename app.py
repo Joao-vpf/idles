@@ -64,11 +64,7 @@ def get_today_word_database():
                 connection.commit()
                 return 1 
 
-        return -1  
-            
-        
-        
-    
+        return -1   
 
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
@@ -150,20 +146,23 @@ def recuperar_todas_imagens():
 
         return imagens
 
-def recuperar_imagem(id_imagem):
+def recuperar_imagem(login):
     with get_db_connection() as connection:
+        login=login.lower()
         cursor = connection.cursor()
-
-        # Recuperar os dados binários da imagem pelo ID
-        cursor.execute("SELECT imagem FROM png WHERE id = ?;", (id_imagem,))
+        print(login)
+        cursor.execute("SELECT png_id FROM user WHERE username = ?;", (login,))
         resultado = cursor.fetchone()
-
         if resultado:
-            # Converter os dados binários para um objeto de imagem
-            dados_imagem = resultado[0]
-            imagem = Image.open(BytesIO(dados_imagem))
+            cursor.execute("SELECT imagem FROM png WHERE id = ?;", (resultado[0],))
+            resultado = cursor.fetchone()
 
-            return imagem
+            if resultado:
+                # Converter os dados binários para um objeto de imagem
+                dados_imagem = resultado[0]
+                imagem = Image.open(BytesIO(dados_imagem))
+
+                return imagem
 
 def image_to_base64(image):
     # Converte a imagem para formato base64
@@ -171,6 +170,21 @@ def image_to_base64(image):
     image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return img_str
+
+def get_user_id_image(login):
+    with get_db_connection() as connection:
+        login=login.lower()
+        cursor = connection.cursor()
+        consulta = "select id from user where username=?;"
+        cursor.execute(consulta, (login,))
+    
+    
+def set_image_user(login, id_img):
+    with get_db_connection() as connection:
+        login=login.lower()
+        cursor = connection.cursor()
+        consulta = "update user set png_id=? where username=?;"
+        cursor.execute(consulta, (id_img, login))
     
 @app.route('/')
 def index():
@@ -231,13 +245,12 @@ def alter_user():
     username = data.get('username')
     password = data.get('password')
     newusername = data.get('newusername')
-    print(password + " "+newusername + " "+username)
     conf = update_login_username_database(login=username, password=password, newlogin=newusername)
     return jsonify({'data': conf})
 
 
-@app.route('/get_images', methods=['GET'])
-def get_images():
+@app.route('/get_all_images', methods=['GET'])
+def get_all_images():
     imagens = recuperar_todas_imagens()
 
     imagens_base64 = [{'id': imagem['id'], 'imagem': image_to_base64(imagem['imagem'])} for imagem in imagens]
@@ -245,10 +258,10 @@ def get_images():
     return {'imagens': imagens_base64}
 
 
-@app.route('/imagem/<int:id_imagem>')
-def mostrar_imagem(id_imagem):
-    
-    imagem = recuperar_imagem( id_imagem)
+@app.route('/imagem/<string:username>')
+def get_one_image(username):
+    print(username)
+    imagem = recuperar_imagem(login=username)
     
     if imagem:
         img_bytes = BytesIO()
@@ -259,6 +272,15 @@ def mostrar_imagem(id_imagem):
 
     return 'Imagem não encontrada', 404
 
+
+@app.route('/set_image', methods=['POST'])
+def set_image():
+    data = request.get_json()
+    id_image = data.get('id_image')
+    username = data.get("username")
+    print(username, " ", id_image)
+    conf = set_image_user(login=username, id_img = id_image)
+    return {'data': 1}
 
 @app.route('/logout')
 @login_required

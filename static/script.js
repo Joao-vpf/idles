@@ -7,6 +7,27 @@ window.onload = function() {
     if (username) 
     {
         conf_login(username);
+        obterImagemDoUsuario(username);
+    }
+}
+
+async function obterImagemDoUsuario(username) 
+{
+    const response = await fetch(`/imagem/${username}`);
+    
+    if (response.ok) 
+    {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+
+        // Substituir a imagem do perfil no HTML
+        const perfilIcon = document.getElementById('perfilIcon');
+        perfilIcon.src = imageUrl;
+        perfilIcon.style.borderRadius = '50%';
+        console.log(localStorage.getItem('username'), " ", imageId);
+    } 
+    else {
+        console.error('Erro ao obter a imagem do usuário:', response.status);
     }
 }
 
@@ -712,48 +733,82 @@ async function alter_user(event)
 
 
 document.getElementById('alter_img').addEventListener('click', alter_img);
+
 async function alter_img(event) {
     event.preventDefault();
 
     const overlay = document.getElementById('overlay');
-    fetch('/get_images')
-        .then(response => response.json())
-        .then(data => {
-            const gallery = document.getElementById('gallery');
-            const selectedImage = document.getElementById('selectedImage');
+    const gallery = document.getElementById('gallery');
+    const selectedImage = document.getElementById('selectedImage');
 
-            // Verificar se a galeria está vazia
-            if (gallery.childElementCount === 0) {
+    // Verificar se a galeria está vazia
+    if (gallery.childElementCount === 0) {
+        await fetch('/get_all_images')
+            .then(response => response.json())
+            .then(data => {
                 data.imagens.forEach(imagem => {
                     // Criar uma miniatura (thumbnail) para cada imagem
                     const imgElement = document.createElement('img');
-                    imgElement.src = 'data:image/png;base64,' + imagem.imagem;
+                    const byteCharacters = atob(imagem.imagem);
+                    const byteNumbers = new Array(byteCharacters.length);
+
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+
+                    const byteArray = new Uint8Array(byteNumbers);
+
+                    // Criar Blob a partir do array de bytes
+                    const blob = new Blob([byteArray], { type: 'image/png' });
+
+                    // Criar URL do Blob
+                    const imageUrl = URL.createObjectURL(blob);
+
+                    imgElement.src = imageUrl;
                     imgElement.alt = 'Imagem ' + imagem.id;
                     imgElement.classList.add('thumbnail');
 
-                    // Adicionar um evento de clique para exibir a imagem completa quando a miniatura for clicada
                     imgElement.addEventListener('click', () => {
-                        substituirImagemPerfil('data:image/png;base64,' + imagem.imagem);
-                        selectedImage.src = 'data:image/png;base64,' + imagem.imagem;
+                        substituirImagemPerfil(imageUrl, imagem.id);
+                        selectedImage.src = imageUrl;
                         selectedImage.alt = 'Imagem ' + imagem.id;
                     });
 
                     // Adicionar a miniatura à galeria
                     gallery.appendChild(imgElement);
                 });
-            }
-        })
-        .catch(error => console.error('Erro ao obter imagens:', error));
-    overlay.style.display = "block";
-    gallery.style.display = "grid";
+            })
+            .catch(error => console.error('Erro ao obter imagens:', error));
+
+        overlay.style.display = "block";
+        gallery.style.display = "grid";
+    }
 
     document.getElementById('overlay').addEventListener('click', clickOutsideHandler);
 }
 
-async function substituirImagemPerfil(src) {
+
+async function substituirImagemPerfil(src, imageId) 
+{
     const perfilIcon = document.getElementById('perfilIcon');
     perfilIcon.src = src;  
-    perfilIcon.style.borderRadius = '50%'; // Adicione a borda arredondada desejada aqui
+    perfilIcon.style.borderRadius = '50%';
+    console.log(localStorage.getItem('username'), " ", imageId);
+
+    await fetch('/set_image', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: localStorage.getItem('username'),
+            id_image: imageId,
+        }),
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
 }
 
 async function clickOutsideHandler(event) {
