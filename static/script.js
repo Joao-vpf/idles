@@ -1,44 +1,27 @@
 
 var vida = 7;
+
+
 window.onload = function() {
     var username = localStorage.getItem('username');
-    if (username) {
+    if (username) 
+    {
         conf_login(username);
-        vida = localStorage.getItem('vida');
-        console.log(vida);
-
-        for(var i=7; i>=0; i--)
-        {
-            var palavra= localStorage.getItem(`wordl ${i}`);
-            console.log(palavra);
-            if(palavra)
-            {
-                //!arrumar isso daqui
-                var block = document.getElementsByClassName("input-block");
-                const blocks = Array.from(block.parentNode.children);
-                blocks[0] = palavra[0];
-                blocks[1] = palavra[1];
-                blocks[2] = palavra[2];
-                blocks[3] = palavra[3];
-                blocks[4] = palavra[4];
-                checkWord(blocks);
-            
-            }
-        }
     }
 }
 
-
-
 var x;
-if (x===undefined)
-{ 
-    fetch('/get_data')
-    .then(response => response.json())
-    .then(data => {
-        x= data.data;
-    })
+async function insertx() {
+    if (x === undefined) {
+        const response = await fetch('/get_data');
+        const data = await response.json();
+        x = data.data;
+        console.log(x);
+    }
 }
+
+insertx();
+
 
 var last_block = -1; 
 
@@ -153,11 +136,8 @@ function checkWord(blocks) {
         })
         .then(response => response.json())
         .then(data => {
-            console.log(data.data)
             if(data.data === 1)
             {
-                localStorage.setItem(`wordl ${vida}`,word);
-                localStorage.setItem("vida",vida);
                 removealert();
                 if (word === x) 
                 {
@@ -453,7 +433,6 @@ async function confirmarcriarconta(event)
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if(data.data === -1)
         {
             alert('Nome de usario já existente.');
@@ -513,7 +492,6 @@ async function deletecount(event)
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if(data.data === -1)
         {
             alert('Senha ou nome de usuario estão errados.');
@@ -521,8 +499,7 @@ async function deletecount(event)
         else
         {
             alert('A conta foi deleta com sucesso.');
-            localStorage.removeItem('username');
-            window.location.reload(); 
+           sairconta({ preventDefault: () => {} });
         }
     })
     .catch(error => {
@@ -538,6 +515,125 @@ async function sairconta(event)
     localStorage.removeItem('username');
     window.location.reload(); 
 }
+
+document.getElementById('alter2_but').addEventListener('click', alter_senha);
+
+async function alter_senha(event)
+{
+
+    const username = document.getElementById("alter2_username").value;
+    const password = document.getElementById("old_password").value;
+    const new_password = document.getElementById("new_password").value;
+   
+    document.getElementById("alter_username").value ="";
+    document.getElementById("old_password").value ="";
+    document.getElementById("new_password").value ="";
+
+   
+
+    if(password === new_password)
+    {
+        alert('Nova senha invalida.');
+        return -1;
+    }
+
+    if(new_password.length < 6)
+    {
+        alert('A nova senha deve ter mais que 6 caracteres.');
+        return -1;
+        
+    }
+   
+
+    event.preventDefault(); 
+    await fetch('/alter_senha', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            newpassword: new_password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        if(data.data === -1)
+        {
+            alert('Senha ou nome de usuario estão errados.');
+        }
+        else
+        {
+            alert('A senha foi alterada com sucesso.');
+            sairconta({ preventDefault: () => {} });
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
+
+}
+
+document.getElementById('alter1_but').addEventListener('click', alter_user);
+
+async function alter_user(event)
+{
+    console.log("Oi");
+    const username = document.getElementById("old_username").value;
+    const password = document.getElementById("alter1_password").value;
+    const new_username = document.getElementById("new_username").value;
+   
+    document.getElementById("old_username").value ="";
+    document.getElementById("alter1_password").value ="";
+    document.getElementById("new_username").value ="";
+
+    var aux = new_username.replace(/\s/, '');
+    if(aux=="")
+    {
+        alert('Usuario deve ter algum caractere além do espaço.');
+        return -1;
+    }
+
+    if (username == new_username)
+    {
+        alert('Novo nome de usuario é igual ao antigo.');
+        return -1;
+    }
+
+    event.preventDefault(); 
+    await fetch('/alter_user', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+            newusername: new_username,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        if(data.data === -1)
+        {
+            alert('Senha ou nome de usuario estão errados.');
+        }
+        else
+        {
+            alert('O username foi alterado com sucesso.');
+            sairconta({ preventDefault: () => {} });
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
+
+}
+
+
 
 /* easter eggs */
 
@@ -557,7 +653,6 @@ function onYouTubeIframeAPIReady(ok) {
                     playerContainer.style.display = 'flex';
                 },
                 'onStateChange': function (event) {
-                    console.log('Estado do Player:', event.data);
                     if(event.data !== 3 && event.data!==-1 && event.data!==1)
                     {
                         playerContainer.remove();

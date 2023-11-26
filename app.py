@@ -88,7 +88,7 @@ def update_login_username_database(login, password,newlogin):
         if get_login_from_database(login,password):
             login=login.lower()
             cursor = connection.cursor()
-            consulta = "update user set usermane =? where username=?;"
+            consulta = "update user set username =? where username=?;"
             cursor.execute(consulta, (newlogin, login))
             return 1
         return -1
@@ -110,6 +110,7 @@ def index():
 @app.route('/get_data')
 def get_data():
     palavra = get_word_from_database()
+    print(palavra)
     return jsonify({'data': palavra})
 
 @app.route('/get_login', methods=['POST'])
@@ -144,6 +145,28 @@ def del_conta():
     conf = delete_login_in_database(login=username, password=password)
     
     return jsonify({'data': conf})
+
+@app.route('/alter_senha', methods=['POST'])
+def alter_senha():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    newpassword = data.get('newpassword')
+    conf = update_login_senha_database(login=username, password=password, newpassword=newpassword)
+    
+    return jsonify({'data': conf})
+
+
+@app.route('/alter_user', methods=['POST'])
+def alter_user():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    newusername = data.get('new_username')
+    print(password + " "+newusername + " "+username)
+    conf = update_login_username_database(login=username, password=password, newlogin=newusername)
+    return jsonify({'data': conf})
+
 
 @app.route('/logout')
 @login_required
