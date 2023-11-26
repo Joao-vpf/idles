@@ -17,8 +17,8 @@ body {
 .menu {
 	position:relative;
 	z-index: 200;
-	height: 15vh;   
-	max-width: 720px;
+	height: 5vh;   
+	max-width: 780px;
 	width: 100%;
 	box-sizing: border-box;
 	display: grid;
@@ -303,6 +303,7 @@ form {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows:1fr;
   gap: 20px; 
+  justify-content: center; /* Centraliza horizontalmente */
 }
 
 /* Blocks Container Styles */
@@ -356,7 +357,7 @@ form {
     border: 3px solid #008c9e;
     background-color: rgba(0, 95, 107, 0.3);
     margin: 5px;
-    height: 450px;
+    height: 400px;
     width: 350px;
     font-size: 20px;
     aspect-ratio: 1;
