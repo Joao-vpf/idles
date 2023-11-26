@@ -11,16 +11,14 @@ window.onload = function() {
 }
 
 var x;
-async function insertx() {
-    if (x === undefined) {
-        const response = await fetch('/get_data');
-        const data = await response.json();
-        x = data.data;
-        console.log(x);
-    }
+if (x===undefined)
+{ 
+    fetch('/get_data')
+    .then(response => response.json())
+    .then(data => {
+        x= data.data;
+    });
 }
-
-insertx();
 
 
 var last_block = -1; 
@@ -590,13 +588,13 @@ async function alter_user(event)
     document.getElementById("new_username").value ="";
 
     var aux = new_username.replace(/\s/, '');
-    if(aux=="")
+    if(aux ==="")
     {
         alert('Usuario deve ter algum caractere além do espaço.');
         return -1;
     }
 
-    if (username == new_username)
+    if (username === new_username)
     {
         alert('Novo nome de usuario é igual ao antigo.');
         return -1;

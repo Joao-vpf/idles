@@ -25,8 +25,8 @@ def check_word_from_database(verif):
     with get_db_connection() as connection:
         print(verif)
         cursor = connection.cursor()
-        consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
         verif=verif.upper()
+        consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
         print(resultados)
@@ -46,8 +46,8 @@ def get_word_from_database():
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
         cursor = connection.cursor()
-        consulta = "SELECT count(*) FROM user WHERE username=? AND password=?;"
         login=login.lower()
+        consulta = "SELECT count(*) FROM user WHERE username=? AND password=?;"
         cursor.execute(consulta, (login, password))
         resultados = cursor.fetchall()
         return resultados[0][0]
@@ -87,6 +87,7 @@ def update_login_username_database(login, password,newlogin):
     with get_db_connection() as connection:
         if get_login_from_database(login,password):
             login=login.lower()
+            newlogin=newlogin.lower()
             cursor = connection.cursor()
             consulta = "update user set username =? where username=?;"
             cursor.execute(consulta, (newlogin, login))
@@ -110,7 +111,6 @@ def index():
 @app.route('/get_data')
 def get_data():
     palavra = get_word_from_database()
-    print(palavra)
     return jsonify({'data': palavra})
 
 @app.route('/get_login', methods=['POST'])
@@ -162,7 +162,7 @@ def alter_user():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    newusername = data.get('new_username')
+    newusername = data.get('newusername')
     print(password + " "+newusername + " "+username)
     conf = update_login_username_database(login=username, password=password, newlogin=newusername)
     return jsonify({'data': conf})
@@ -175,4 +175,4 @@ def logout():
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',debug=False)
+    app.run(host='0.0.0.0', port=8080,debug=False)
