@@ -1,6 +1,8 @@
-from flask import Flask, session, render_template, jsonify, request
+from flask import Flask, session, render_template, jsonify, request, send_file
 from flask_login import LoginManager,login_manager, UserMixin, login_user, login_required, logout_user, current_user
-from datetime import timedelta
+from PIL import Image
+from io import BytesIO
+import base64
 import sqlite3
 
 app = Flask(__name__)
@@ -23,13 +25,12 @@ def get_db_connection():
 
 def check_word_from_database(verif):
     with get_db_connection() as connection:
-        print(verif)
         cursor = connection.cursor()
         verif=verif.upper()
         consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
-        print(resultados)
+        #print(resultados)
         if resultados:
             return 1
         return -1
@@ -40,8 +41,34 @@ def get_word_from_database():
         consulta = "SELECT palavra FROM palavras ORDER BY RANDOM() LIMIT 1;"
         cursor.execute(consulta)
         resultados = cursor.fetchall()
-        print(resultados[0][0].upper())
+       # print(resultados[0][0].upper())
         return resultados[0][0].upper()
+    
+
+def get_today_word_database():
+    with get_db_connection() as connection:
+        cursor = connection.cursor()
+
+        consulta = "SELECT COUNT(*) FROM palavra_dia WHERE data_palavra = date();"
+        resultados = cursor.execute(consulta).fetchone()
+
+        if resultados[0] == 0:
+            consulta =  "select id from palavras where 0 in (select count(*) from palavra_dia where data_palavra >= strftime('%Y-%m-%d', 'now', '-60 days') and palavras_id = palavras.id) order by random() limit 1;"
+            resultados = cursor.execute(consulta).fetchone()
+
+            if resultados:
+                palavras_id = resultados[0]
+                consulta = "INSERT INTO palavra_dia(data_palavra, palavras_id) VALUES (date(), ?);"
+                cursor.execute(consulta, (palavras_id,))
+                #print(resultados[0])
+                connection.commit()
+                return 1 
+
+        return -1  
+            
+        
+        
+    
 
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
@@ -103,6 +130,47 @@ def update_login_senha_database(login, password,newpassword):
             cursor.execute(consulta, (newpassword, login))
             return 1
         return -1
+    
+
+
+def recuperar_todas_imagens():
+    with get_db_connection() as connection:
+        cursor = connection.cursor()
+
+        # Recuperar todos os dados binários das imagens
+        cursor.execute("SELECT id, imagem FROM png;")
+        resultados = cursor.fetchall()
+
+        imagens = []
+
+        for resultado in resultados:
+            id_imagem, dados_imagem = resultado
+            imagem = Image.open(BytesIO(dados_imagem))
+            imagens.append({'id': id_imagem, 'imagem': imagem})
+
+        return imagens
+
+def recuperar_imagem(id_imagem):
+    with get_db_connection() as connection:
+        cursor = connection.cursor()
+
+        # Recuperar os dados binários da imagem pelo ID
+        cursor.execute("SELECT imagem FROM png WHERE id = ?;", (id_imagem,))
+        resultado = cursor.fetchone()
+
+        if resultado:
+            # Converter os dados binários para um objeto de imagem
+            dados_imagem = resultado[0]
+            imagem = Image.open(BytesIO(dados_imagem))
+
+            return imagem
+
+def image_to_base64(image):
+    # Converte a imagem para formato base64
+    buffered = BytesIO()
+    image.save(buffered, format="PNG")
+    img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+    return img_str
     
 @app.route('/')
 def index():
@@ -168,6 +236,30 @@ def alter_user():
     return jsonify({'data': conf})
 
 
+@app.route('/get_images', methods=['GET'])
+def get_images():
+    imagens = recuperar_todas_imagens()
+
+    imagens_base64 = [{'id': imagem['id'], 'imagem': image_to_base64(imagem['imagem'])} for imagem in imagens]
+
+    return {'imagens': imagens_base64}
+
+
+@app.route('/imagem/<int:id_imagem>')
+def mostrar_imagem(id_imagem):
+    
+    imagem = recuperar_imagem( id_imagem)
+    
+    if imagem:
+        img_bytes = BytesIO()
+        imagem.save(img_bytes, format='JPEG')
+        img_bytes.seek(0)
+        
+        return send_file(img_bytes, mimetype='image/jpeg')
+
+    return 'Imagem não encontrada', 404
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -176,4 +268,5 @@ def logout():
 
 if __name__ == '__main__':
     #app.run(host='0.0.0.0', port=8080,debug=False)
+    get_today_word_database()
     app.run(debug=True)

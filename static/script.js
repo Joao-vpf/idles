@@ -343,21 +343,20 @@ document.addEventListener('cut', (event) => {
 
 /* login */
 
-document.addEventListener("DOMContentLoaded", function () {
-    var loginIcon = document.getElementById("perfilIcon");
-    var loginMenu = document.getElementById("perfilMenu");
+document.getElementById('perfilIcon').addEventListener("click", abrirmenulogin)
 
-    loginIcon.addEventListener("click", function () {
-		if (loginMenu.style.display==="block" ) 
-		{
-            loginMenu.style.display = "none";
-        }
-        else
-        {
-			loginMenu.style.display = "block";
-		}
-    });
-});
+async function abrirmenulogin()
+{
+    var loginMenu = document.getElementById("perfilMenu");
+    if (loginMenu.style.display==="flex" ) 
+    {
+        loginMenu.style.display = "none";
+    }
+    else
+    {
+        loginMenu.style.display = "flex";
+    }
+}
 
 
 // Adiciona eventos aos botões
@@ -404,7 +403,7 @@ async function conf_login(username)
 {
     document.getElementById('username_perfil').textContent = username;
     document.getElementById('loginBlock').remove();
-    document.getElementById('perfilBlock').style.display = 'block';
+    document.getElementById('perfilBlock').style.display = 'flex';
 
     switch(username)
     {
@@ -515,16 +514,39 @@ document.getElementById('configuracoesButton').addEventListener('click', config)
 async function config(event)
 {
     event.preventDefault(); 
-    if(document.getElementById('infoperfil').style.display === 'block')
+    if(document.getElementById('infoperfil').style.display === 'flex')
     {
 		document.getElementById('infoperfil').style.display = 'none';
 	}
 	else
 	{
-		document.getElementById('infoperfil').style.display = 'block';
+		document.getElementById('infoperfil').style.display = 'flex';
 	}
 		
 }
+
+
+document.addEventListener('click', function (event) {
+    //fecha abas menu e infoperfil
+    const configuracoesButton = document.getElementById('configuracoesButton');
+    const infoperfil = document.getElementById('infoperfil');
+    const perfilMenu = document.getElementById('perfilMenu');
+    const perfilicon = document.getElementById('perfilIcon');
+    const overlay = document.getElementById('overlay');
+
+    // Verifica se o overlay está ativo
+    if (overlay.style.display === "none") {
+        // Verifica se o clique ocorreu fora do botão e do infoperfil
+        if (!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) {
+            infoperfil.style.display = 'none';
+        }
+        
+        if (!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
+        {
+            abrirmenulogin()
+        }
+    }
+});
 
 document.getElementById('del_but').addEventListener('click', deletecount);
 
@@ -689,6 +711,61 @@ async function alter_user(event)
 }
 
 
+document.getElementById('alter_img').addEventListener('click', alter_img);
+async function alter_img(event) {
+    event.preventDefault();
+
+    const overlay = document.getElementById('overlay');
+    fetch('/get_images')
+        .then(response => response.json())
+        .then(data => {
+            const gallery = document.getElementById('gallery');
+            const selectedImage = document.getElementById('selectedImage');
+
+            // Verificar se a galeria está vazia
+            if (gallery.childElementCount === 0) {
+                data.imagens.forEach(imagem => {
+                    // Criar uma miniatura (thumbnail) para cada imagem
+                    const imgElement = document.createElement('img');
+                    imgElement.src = 'data:image/png;base64,' + imagem.imagem;
+                    imgElement.alt = 'Imagem ' + imagem.id;
+                    imgElement.classList.add('thumbnail');
+
+                    // Adicionar um evento de clique para exibir a imagem completa quando a miniatura for clicada
+                    imgElement.addEventListener('click', () => {
+                        substituirImagemPerfil('data:image/png;base64,' + imagem.imagem);
+                        selectedImage.src = 'data:image/png;base64,' + imagem.imagem;
+                        selectedImage.alt = 'Imagem ' + imagem.id;
+                    });
+
+                    // Adicionar a miniatura à galeria
+                    gallery.appendChild(imgElement);
+                });
+            }
+        })
+        .catch(error => console.error('Erro ao obter imagens:', error));
+    overlay.style.display = "block";
+    gallery.style.display = "grid";
+
+    document.getElementById('overlay').addEventListener('click', clickOutsideHandler);
+}
+
+async function substituirImagemPerfil(src) {
+    const perfilIcon = document.getElementById('perfilIcon');
+    perfilIcon.src = src;  
+    perfilIcon.style.borderRadius = '50%'; // Adicione a borda arredondada desejada aqui
+}
+
+async function clickOutsideHandler(event) {
+    const overlay = document.getElementById('overlay');
+    const gallery = document.getElementById('gallery');
+
+    overlay.style.display = "none";
+    gallery.style.display = "none";
+
+    // Remover o event listener após ocultar os elementos
+    document.removeEventListener('click', clickOutsideHandler);
+}
 
 /* easter eggs */
 
