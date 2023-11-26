@@ -15,15 +15,18 @@ body {
 
 /* Menu Styles */
 .menu {
-	position:relative;
-	z-index: 200;
-	height: 5vh;   
-	max-width: 780px;
-	width: 100%;
-	box-sizing: border-box;
-	display: grid;
-	grid-template-columns: 5vh 5vh 1fr 5vh 5vh;
-	grid-gap: 0;
+  position: relative;
+  z-index: 200;
+  height: 5vh;
+  max-width: 780px;
+  width: 100%;
+  gap: 10px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 5vh 5vh 1fr 5vh 5vh;
+  align-items: center; /* Adicionado para centralizar verticalmente */
+  justify-content: center; /* Adicionado para centralizar horizontalmente */
+  grid-gap: 0;
 }
 
 .menu h1{
@@ -59,7 +62,8 @@ body {
   border-radius: 50%;
   cursor: pointer;
 }    
-    
+
+
 .perfil-menu {
 	grid-column: 5;
 	display: none;
@@ -438,11 +442,28 @@ form {
 }
 
 #letras_used h3{
-  font-size: 20px;
+  text-align: start;
 }
 
 
 
+
+/* Icons header */
+
+#explicacao-container {
+  grid-column: 4;
+  grid-row: 1;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+}
+   
+#explicacao-container img {
+  width: 33px;
+  height: 33px;
+  cursor: pointer;
+}  
 
 
 

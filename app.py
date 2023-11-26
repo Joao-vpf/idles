@@ -150,7 +150,7 @@ def recuperar_imagem(login):
     with get_db_connection() as connection:
         login=login.lower()
         cursor = connection.cursor()
-        print(login)
+        #print(login)
         cursor.execute("SELECT png_id FROM user WHERE username = ?;", (login,))
         resultado = cursor.fetchone()
         if resultado:
@@ -260,7 +260,7 @@ def get_all_images():
 
 @app.route('/imagem/<string:username>')
 def get_one_image(username):
-    print(username)
+    #print(username)
     imagem = recuperar_imagem(login=username)
     
     if imagem:
@@ -278,9 +278,9 @@ def set_image():
     data = request.get_json()
     id_image = data.get('id_image')
     username = data.get("username")
-    print(username, " ", id_image)
+    #print(username, " ", id_image)
     conf = set_image_user(login=username, id_img = id_image)
-    return {'data': 1}
+    return {'data': conf}
 
 @app.route('/logout')
 @login_required
@@ -289,6 +289,6 @@ def logout():
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
 if __name__ == '__main__':
-    #app.run(host='0.0.0.0', port=8080,debug=False)
     get_today_word_database()
+    #app.run(host='0.0.0.0', port=8080,debug=False)
     app.run(debug=True)

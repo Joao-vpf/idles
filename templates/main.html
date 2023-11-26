@@ -17,7 +17,8 @@
 				<slot> Idles </slot>
 			</h1>
 			<div class="perfil-container">
-				<img src="{{ url_for('static', filename='png/login_icon.png') }}" id="perfilIcon"></div>
+				<img src="{{ url_for('static', filename='png/login_icon.png') }}" id="perfilIcon">
+			</div>
 				<div class="perfil-menu" id="perfilMenu">
 					<div class="perfil-block" id="perfilBlock">
 						<h1 id = "username_perfil">username</h1>
@@ -51,7 +52,9 @@
 						<button type="button"  class="confirmar-criar" id="confirmarcriar">Confirmar</button>
 					</div>
 				</div>
-
+			<div class="explicacao-container" id = explicacao-container>
+				<img src="{{ url_for('static', filename='png/expl_icon.png') }}" id="explIcon">
+			</div>
 		</wc-header>
 		
 		
@@ -94,8 +97,8 @@
 		<div id="player-container"><div id="player"></div></div>
 
 		<div class = "main">
-			<div class="alert" id="alert1"></div>
 			
+			<div class="alert" id="alert1"></div>
 			
 			<div class="life">
 				<div class="heart" id="heart1">❤️</div>
@@ -106,6 +109,7 @@
 				<div class="heart" id="heart6">❤️</div>
 				<div class="heart" id="heart7">❤️</div>
 			</div>
+
 			<div class="all_blocks" id="all_blocks">
 				<div class="blocks-container">
 					<div class="input-block" id="1" contenteditable="true"></div>
@@ -117,6 +121,8 @@
 			</div>
 
 			<div class="letras_used" id="letras_used">
+				<h2 class="modo_game"> Modo do game:</h2>
+				<h3 class="md_game"  id="md_game"></h3>
 				<h2 class="l_des"> Letras descartadas:</h2>
 				<h3 class="letras_des" id="letras_des"></h3>
 				<h2 class="l_enc"> Letras encontras:</h2>
@@ -130,5 +136,6 @@
 		<div id="gallery"></div>
 		<div id="overlay" class="overlay"></div>
 	</div>
+	
 </body>
 </html>

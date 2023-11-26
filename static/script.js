@@ -24,7 +24,6 @@ async function obterImagemDoUsuario(username)
         const perfilIcon = document.getElementById('perfilIcon');
         perfilIcon.src = imageUrl;
         perfilIcon.style.borderRadius = '50%';
-        console.log(localStorage.getItem('username'), " ", imageId);
     } 
     else {
         console.error('Erro ao obter a imagem do usuário:', response.status);
@@ -46,10 +45,10 @@ var last_block = -1;
 
 document.addEventListener('keydown', (event) => {
     block = event.target;
-    if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT')|| event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
+    console.log(document.activeElement.tagName);
+    if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT') || event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
     {
         block = last_block;
-        last_block = -1;
     }
 
     if((event.key === 'Enter' &&  document.activeElement.tagName === 'INPUT'))
@@ -92,28 +91,32 @@ document.addEventListener('keydown', (event) => {
 
     switch (key) {
         case 'Enter':
-            checkWord(blocks);
+            checkWord(blocks) === 1
             break;
         case 'Backspace':
             if (blocks[index].textContent === "" && index > 0)
             {
                 blocks[index-1].focus();
                 blocks[index-1].textContent = "";
+                last_block = blocks[index-1];
             }
             else
             {
                 blocks[index].focus();
                 blocks[index].textContent = "";
+                last_block = blocks[index];
             }
             break;
         case 'ArrowLeft':
             if (index > 0) {
                 blocks[index - 1].focus();
+                last_block = blocks[index - 1];
             }
             break;
         case 'ArrowRight':
             if (index < blocks.length - 1) {
                 blocks[index + 1].focus();
+                last_block = blocks[index + 1];
             }
             break;
         default:
@@ -122,6 +125,7 @@ document.addEventListener('keydown', (event) => {
                 blocks[index].classList.add('grow'); 
                 if (index < blocks.length - 1) {
                     blocks[index + 1].focus();
+                    last_block = blocks[index + 1];
                 } 
                 else 
                 {
@@ -157,6 +161,8 @@ function checkWord(blocks) {
         .then(data => {
             if(data.data === 1)
             {
+                
+                last_block = -1;
                 removealert();
                 if (word === x) 
                 {
@@ -167,7 +173,8 @@ function checkWord(blocks) {
                     removeheart();
                     vida -= 1;
                     handleWrongWord(blocks);
-                }            
+                }   
+                return 1;         
             }
             else
             {
@@ -177,8 +184,8 @@ function checkWord(blocks) {
         .catch(error => {
             console.error('Erro ao verificar a palavra:', error);
         });
-
     }
+    
 }
 
 function animateBlocks(blocks) {
@@ -291,7 +298,6 @@ function adicionar_letra_bloco(tipo, letra)
     var letrasArray = conteudoAtual.split(', ');
 
     if (letrasArray.includes(letra) || document.querySelector('.letras_enc').textContent.includes(letra) || document.querySelector('.letras_cer').textContent.includes(letra)) {
-        console.log("Esta letra já está em um tipo diferente.");
         return -1;
     }
 
@@ -793,7 +799,6 @@ async function substituirImagemPerfil(src, imageId)
     const perfilIcon = document.getElementById('perfilIcon');
     perfilIcon.src = src;  
     perfilIcon.style.borderRadius = '50%';
-    console.log(localStorage.getItem('username'), " ", imageId);
 
     await fetch('/set_image', {
         method: 'POST',
