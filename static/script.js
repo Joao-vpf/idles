@@ -7,7 +7,6 @@ window.onload = function() {
     if (username) 
     {
         conf_login(username);
-        obterImagemDoUsuario(username);
     }
 }
 
@@ -45,7 +44,6 @@ var last_block = -1;
 
 document.addEventListener('keydown', (event) => {
     block = event.target;
-    console.log(document.activeElement.tagName);
     if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT') || event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
     {
         block = last_block;
@@ -269,45 +267,65 @@ function adicionar_letra_bloco(tipo, letra)
     if (tipo === 1) 
     {
         h = document.querySelector('.letras_des');
-    } else if (tipo === 2) 
+    } 
+    else  
     {
-        h = document.querySelector('.letras_enc');
-        if (document.querySelector('.letras_cer').textContent.includes(letra))
-         {
-            return -1;
-        }
-    } else if (tipo === 3) {
-        h = document.querySelector('.letras_cer');
-        if (document.querySelector('.letras_enc').textContent.includes(letra)) 
+        if (tipo === 2)
         {
-            var letrasEncArray = document.querySelector('.letras_enc').textContent.split(', ');
-            var indexEnc = letrasEncArray.indexOf(letra);
-            if (indexEnc !== -1) {
-                letrasEncArray.splice(indexEnc, 1);
-                document.querySelector('.letras_enc').textContent = letrasEncArray.join(', ').slice(1);
+            h = document.querySelector('.letras_enc');
+            if (document.querySelector('.letras_cer').textContent.includes(letra))
+            {
+                return -1;
             }
         }
-    } else {
-        h = document.querySelector('.letras_des');
-        h.textContent = ""; 
+        else 
+        {
+            if (tipo === 3) 
+            {
+                h = document.querySelector('.letras_cer');
+                if (document.querySelector('.letras_enc').textContent.includes(letra)) 
+                {
+                    var letrasEncArray = document.querySelector('.letras_enc').textContent.split(', ');
+                    var indexEnc = letrasEncArray.indexOf(letra);
+                    letrasEncArray.splice(indexEnc, 1);
+                    letrasEncArray.sort();
+                    var aux = letrasEncArray.join(', ');
+                    if(aux[0] == ",")
+                    document.querySelector('.letras_enc').textContent = aux.slice(1);
+                    else
+                    document.querySelector('.letras_enc').textContent = aux 
+                    
+                }
+            }
+            else 
+            {
+                h = document.querySelector('.letras_des');
+                h.textContent = ""; 
+                return -1;
+            }
+        } 
+    }
+   
+
+
+    if (document.querySelector('.letras_des').textContent.includes(letra) || document.querySelector('.letras_enc').textContent.includes(letra) || document.querySelector('.letras_cer').textContent.includes(letra)) 
+    {
+     
         return -1;
     }
-
+    
     var conteudoAtual = h.textContent;
 
     var letrasArray = conteudoAtual.split(', ');
 
-    if (letrasArray.includes(letra) || document.querySelector('.letras_enc').textContent.includes(letra) || document.querySelector('.letras_cer').textContent.includes(letra)) {
-        return -1;
-    }
-
     letrasArray.push(letra);
-
-    letrasArray = [...new Set(letrasArray)];
-
     letrasArray.sort();
 
-    h.textContent = letrasArray.join(', ').slice(1);
+    var aux = letrasArray.join(', ');
+    if(aux[0] == ",")
+    h.textContent = aux.slice(1);
+    else
+    h.textContent = aux 
 
     return 1;
 }
@@ -431,6 +449,9 @@ async function conf_login(username)
     document.getElementById('username_perfil').textContent = username;
     document.getElementById('loginBlock').remove();
     document.getElementById('perfilBlock').style.display = 'flex';
+
+
+    obterImagemDoUsuario(username);
 
     switch(username)
     {
@@ -727,8 +748,15 @@ async function alter_user(event)
         }
         else
         {
-            alert('O username foi alterado com sucesso.');
-            sairconta({ preventDefault: () => {} });
+            if (data.data=== 2)
+            {
+                alert('O novo nome de usuario já existe.');
+            }
+            else
+            {
+                alert('O username foi alterado com sucesso.');
+                sairconta({ preventDefault: () => {} });
+            }
         }
     })
     .catch(error => {
@@ -746,7 +774,7 @@ async function alter_img(event) {
     const overlay = document.getElementById('overlay');
     const gallery = document.getElementById('gallery');
     const selectedImage = document.getElementById('selectedImage');
-
+    
     // Verificar se a galeria está vazia
     if (gallery.childElementCount === 0) {
         await fetch('/get_all_images')
@@ -786,10 +814,10 @@ async function alter_img(event) {
             })
             .catch(error => console.error('Erro ao obter imagens:', error));
 
-        overlay.style.display = "block";
-        gallery.style.display = "grid";
     }
 
+    overlay.style.display = "block";
+    gallery.style.display = "grid";
     document.getElementById('overlay').addEventListener('click', clickOutsideHandler);
 }
 
@@ -799,7 +827,6 @@ async function substituirImagemPerfil(src, imageId)
     const perfilIcon = document.getElementById('perfilIcon');
     perfilIcon.src = src;  
     perfilIcon.style.borderRadius = '50%';
-
     await fetch('/set_image', {
         method: 'POST',
         headers: {

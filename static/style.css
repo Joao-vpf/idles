@@ -401,11 +401,7 @@ form {
     grid-column: 3;
     border: 3px solid #008c9e;
     background-color: rgba(0, 95, 107, 0.3);
-    margin: 5px;
-    height: 400px;
     width: 350px;
-    font-size: 20px;
-    aspect-ratio: 1;
     font-family: 'Mitr', sans-serif;
     color: white;
     border-radius: 10%;
@@ -414,6 +410,7 @@ form {
     font-size: 1.25em;
     line-height: 1em;
     flex-direction: column;
+    font-size: 17.5px;
     cursor: pointer;
     padding: 10px;
     caret-color: transparent;
@@ -424,6 +421,7 @@ form {
 
 #letras_used h2{
   color: white;
+  
 }
 
 #letras_used .l_des
@@ -454,7 +452,7 @@ form {
   grid-column: 4;
   grid-row: 1;
   position: relative;
-  display: flex;
+  display: none;
   justify-content: center;
   z-index: 100;
 }

@@ -108,18 +108,20 @@ def delete_login_in_database(login, password):
 
 def update_login_username_database(login, password,newlogin):
     with get_db_connection() as connection:
-        if get_login_from_database(login,password):
-            login=login.lower()
-            newlogin=newlogin.lower()
-            cursor = connection.cursor()
-            consulta = "update user set username =? where username=?;"
-            cursor.execute(consulta, (newlogin, login))
-            return 1
+        login=login.lower()
+        newlogin=newlogin.lower()
+        if get_login_from_database(login, password) == 1:
+            if get_username_from_database(newlogin) == 1:
+                cursor = connection.cursor()
+                consulta = "update user set username =? where username=?;"
+                cursor.execute(consulta, (newlogin, login))
+                return 1
+            return 2
         return -1
 
 def update_login_senha_database(login, password,newpassword):
     with get_db_connection() as connection:
-        if get_login_from_database(login,password):
+        if get_login_from_database(login,password) == 1:
             login=login.lower()
             cursor = connection.cursor()
             consulta = "update user set password=? where username=?;"
@@ -290,5 +292,5 @@ def logout():
 
 if __name__ == '__main__':
     get_today_word_database()
-    #app.run(host='0.0.0.0', port=8080,debug=False)
+   # app.run(host='0.0.0.0', port=8080,debug=False)
     app.run(debug=True)
