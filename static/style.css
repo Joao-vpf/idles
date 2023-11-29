@@ -399,6 +399,7 @@ form {
 
 #letras_used{
     grid-column: 3;
+    margin: 1px;
     border: 3px solid #008c9e;
     background-color: rgba(0, 95, 107, 0.3);
     width: 350px;
@@ -408,7 +409,7 @@ form {
     display: flex;
     box-sizing: border-box;
     font-size: 1.25em;
-    line-height: 1em;
+    line-height: 1.30em;
     flex-direction: column;
     font-size: 17.5px;
     cursor: pointer;
@@ -420,6 +421,7 @@ form {
 
 
 #letras_used h2{
+  margin: 10px;
   color: white;
   
 }
@@ -429,18 +431,15 @@ form {
   color:rgb(232, 127, 127);
 }
 
-#letras_used .l_enc
-{
-  color:rgb(249, 244, 148);
-}
-
-#letras_used .l_cer
+#letras_used .l_res
 {
   color:rgb(7, 220, 152);
 }
 
+
 #letras_used h3{
-  text-align: start;
+  margin: 10px;
+  text-align: justify;
 }
 
 

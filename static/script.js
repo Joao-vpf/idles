@@ -193,10 +193,9 @@ function animateBlocks(blocks) {
             block.style.transition = 'background-color 0.1s ease';
             block.style.backgroundColor = 'rgb(0, 164, 113)';
             block.classList.add('onda');
-            adicionar_letra_bloco(3, block.textContent);
+            adicionar_letra_bloco(block.textContent);
         }, index * 40); 
     });
-    adicionar_letra_bloco(4, "");
 }
 
 function removeheart()
@@ -211,7 +210,7 @@ function handleWrongWord(blocks) {
         if(block.textContent === x[parseInt(block.id)-1]) 
         {   
             block.style.backgroundColor = 'rgb(0, 164, 113)';
-            adicionar_letra_bloco(3, block.textContent);
+            adicionar_letra_bloco(block.textContent);
         }
     });
     
@@ -226,7 +225,7 @@ function handleWrongWord(blocks) {
             {
                 block.classList.add('yshake');
                 block.style.backgroundColor = 'rgb(249, 244, 148)';
-                adicionar_letra_bloco(2, block.textContent);
+                adicionar_letra_bloco(block.textContent);
             }
             else
             {
@@ -235,7 +234,7 @@ function handleWrongWord(blocks) {
                     block.classList.add('rshake');
                     block.style.transition = 'background-color 0.5s ease';
                     block.style.backgroundColor = 'rgb(232, 127, 127)'; 
-                    adicionar_letra_bloco(1, block.textContent);
+                    adicionar_letra_bloco(block.textContent);
                 }
             }
         }
@@ -246,7 +245,7 @@ function handleWrongWord(blocks) {
                 block.classList.add('rshake');
                 block.style.transition = 'background-color 0.5s ease';
                 block.style.backgroundColor = 'rgb(232, 127, 127)'; 
-                adicionar_letra_bloco(1, block.textContent);
+                adicionar_letra_bloco( block.textContent);
             }
         }
     });
@@ -260,74 +259,14 @@ function handleWrongWord(blocks) {
     }
 }
 
-function adicionar_letra_bloco(tipo, letra) 
+function adicionar_letra_bloco(letra) 
 {
-    var h;
-
-    if (tipo === 1) 
+    var h = document.getElementById("letras_res");
+    if (h.textContent.includes(letra))
     {
-        h = document.querySelector('.letras_des');
-    } 
-    else  
-    {
-        if (tipo === 2)
-        {
-            h = document.querySelector('.letras_enc');
-            if (document.querySelector('.letras_cer').textContent.includes(letra))
-            {
-                return -1;
-            }
-        }
-        else 
-        {
-            if (tipo === 3) 
-            {
-                h = document.querySelector('.letras_cer');
-                if (document.querySelector('.letras_enc').textContent.includes(letra)) 
-                {
-                    var letrasEncArray = document.querySelector('.letras_enc').textContent.split(', ');
-                    var indexEnc = letrasEncArray.indexOf(letra);
-                    letrasEncArray.splice(indexEnc, 1);
-                    letrasEncArray.sort();
-                    var aux = letrasEncArray.join(', ');
-                    if(aux[0] == ",")
-                    document.querySelector('.letras_enc').textContent = aux.slice(1);
-                    else
-                    document.querySelector('.letras_enc').textContent = aux 
-                    
-                }
-            }
-            else 
-            {
-                h = document.querySelector('.letras_des');
-                h.textContent = ""; 
-                return -1;
-            }
-        } 
+        h.textContent =  h.textContent.slice(h.textContent.search(letra));
     }
-   
 
-
-    if (document.querySelector('.letras_des').textContent.includes(letra) || document.querySelector('.letras_enc').textContent.includes(letra) || document.querySelector('.letras_cer').textContent.includes(letra)) 
-    {
-     
-        return -1;
-    }
-    
-    var conteudoAtual = h.textContent;
-
-    var letrasArray = conteudoAtual.split(', ');
-
-    letrasArray.push(letra);
-    letrasArray.sort();
-
-    var aux = letrasArray.join(', ');
-    if(aux[0] == ",")
-    h.textContent = aux.slice(1);
-    else
-    h.textContent = aux 
-
-    return 1;
 }
 
 
