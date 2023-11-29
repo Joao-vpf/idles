@@ -530,18 +530,26 @@ document.addEventListener('click', function (event) {
     const infoperfil = document.getElementById('infoperfil');
     const perfilMenu = document.getElementById('perfilMenu');
     const perfilicon = document.getElementById('perfilIcon');
+    const menumodo = document.getElementById("icon-menu-container")
+    const menumodoaberto = document.getElementById("barra_menu_icon")
     const overlay = document.getElementById('overlay');
 
     // Verifica se o overlay está ativo
     if (overlay.style.display === "none") {
         // Verifica se o clique ocorreu fora do botão e do infoperfil
-        if (!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) {
+        if (!menumodoaberto.contains(event.target) && !menumodo.contains(event.target) &&!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) {
             infoperfil.style.display = 'none';
         }
         
-        if (!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
+        if (!menumodoaberto.contains(event.target) && !menumodo.contains(event.target) &&!perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
         {
             perfilMenu.style.display = 'none';
+        }
+
+        if(!menumodoaberto.contains(event.target) && !menumodo.contains(event.target) && !perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
+        {
+            menumodoaberto.style.display = 'none';
+            console.log();
         }
     }
 });
@@ -803,6 +811,26 @@ async function clickOutsideHandler(event) {
     // Remover o event listener após ocultar os elementos
     document.removeEventListener('click', clickOutsideHandler);
 }
+
+
+/* Menu de opções */
+
+document.getElementById('icon-menu-container').addEventListener('click', icon_menu_container);
+
+
+
+async function icon_menu_container(event)
+{
+    event.preventDefault();
+    const  barra_menu= document.getElementById('barra_menu_icon');
+
+    barra_menu.style.display ="flex"
+
+    
+}
+
+
+
 
 /* easter eggs */
 

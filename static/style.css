@@ -125,7 +125,7 @@ form {
   padding: 8px; 
 }
 
-/* Estilize o botão de login, se desejar */
+
 #loginBlock input {
   outline: none;
   width: 100px; 
@@ -444,26 +444,73 @@ form {
 }
 
 
-
-
 /* Icons header */
 
-#explicacao-container {
-  grid-column: 4;
+/* Menu modos */
+/* todo aqui po*/
+#icon-menu-container {
+  grid-column: 1;
   grid-row: 1;
   position: relative;
-  display: none;
+  display: flex;
   justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   z-index: 100;
 }
    
-#explicacao-container img {
-  width: 33px;
-  height: 33px;
+#icon-menu-container img {
+  width: 47px;
+  height: 47px;
   cursor: pointer;
 }  
 
+#barra_menu_icon {
+  grid-column: 1;
+	position: absolute;
+  top: 100%;
+  width: 200px;
+  padding: 15px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 30%);
+  justify-content: center;
+  
+}
 
+#button_menu_icon_container 
+{
+  justify-content: center;
+  align-items: center;
+  display: grid;
+}
+
+#barra_menu_icon  h1{
+  grid-column: 1;
+  grid-row: 1;
+  font-family: 'Georgia', serif;
+  font-size: 1em;
+}
+
+
+#barra_menu_icon button {
+  grid-column: 1;
+  padding: 5px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#barra_menu_icon .menu_icon_today {
+  grid-row: 2;
+}
+#barra_menu_icon .menu_icon_inf {
+  grid-row: 3;
+}
 
 /* Animations */
 @keyframes onda {
