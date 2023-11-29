@@ -1,3 +1,4 @@
+from ctypes import resize
 from flask import Flask, session, render_template, jsonify, request, send_file
 from flask_login import LoginManager,login_manager, UserMixin, login_user, login_required, logout_user, current_user
 from PIL import Image
@@ -62,8 +63,12 @@ def get_today_word_database():
                 cursor.execute(consulta, (palavras_id,))
                 #print(resultados[0])
                 connection.commit()
-                return 1 
-
+                
+        consulta = "SELECT palavra FROM palavras where id in (select palavras_id from palavra_dia where data_palavra = date());"
+        resultados = cursor.execute(consulta).fetchone()
+        if resultados:
+            return resultados[0].upper()
+        
         return -1   
 
 def get_login_from_database(login, password):
@@ -195,6 +200,11 @@ def index():
 @app.route('/get_data')
 def get_data():
     palavra = get_word_from_database()
+    return jsonify({'data': palavra})
+
+@app.route('/get_today')
+def get_today():
+    palavra = get_today_word_database()
     return jsonify({'data': palavra})
 
 @app.route('/get_login', methods=['POST'])

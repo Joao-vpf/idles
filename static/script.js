@@ -4,40 +4,40 @@ var vida = 7;
 
 window.onload = function() {
     var username = localStorage.getItem('username');
+    search_x(localStorage.getItem("modogame"));
     if (username) 
     {
         conf_login(username);
     }
 }
 
-async function obterImagemDoUsuario(username) 
-{
-    const response = await fetch(`/imagem/${username}`);
-    
-    if (response.ok) 
-    {
-        const blob = await response.blob();
-        const imageUrl = URL.createObjectURL(blob);
 
-        // Substituir a imagem do perfil no HTML
-        const perfilIcon = document.getElementById('perfilIcon');
-        perfilIcon.src = imageUrl;
-        perfilIcon.style.borderRadius = '50%';
-    } 
-    else {
-        console.error('Erro ao obter a imagem do usuário:', response.status);
+var x;
+
+async function search_x(tipo)
+{
+    if(!tipo)
+    {
+        if (x===undefined)
+        { 
+            fetch('/get_data')
+            .then(response => response.json())
+            .then(data => {
+                x= data.data;
+            });
+        }
+    }
+    else
+    {
+        fetch('/get_today')
+        .then(response => response.json())
+        .then(data => {
+            x= data.data;
+        });
+        
     }
 }
 
-var x;
-if (x===undefined)
-{ 
-    fetch('/get_data')
-    .then(response => response.json())
-    .then(data => {
-        x= data.data;
-    });
-}
 
 
 var last_block = -1; 
@@ -392,6 +392,25 @@ async function login(event)
         console.error('Erro ao enviar a solicitação:', error);
     });
    
+}
+
+async function obterImagemDoUsuario(username) 
+{
+    const response = await fetch(`/imagem/${username}`);
+    
+    if (response.ok) 
+    {
+        const blob = await response.blob();
+        const imageUrl = URL.createObjectURL(blob);
+
+        // Substituir a imagem do perfil no HTML
+        const perfilIcon = document.getElementById('perfilIcon');
+        perfilIcon.src = imageUrl;
+        perfilIcon.style.borderRadius = '50%';
+    } 
+    else {
+        console.error('Erro ao obter a imagem do usuário:', response.status);
+    }
 }
 
 async function conf_login(username)
@@ -824,13 +843,35 @@ async function icon_menu_container(event)
     event.preventDefault();
     const  barra_menu= document.getElementById('barra_menu_icon');
 
-    barra_menu.style.display ="flex"
-
+    if( barra_menu.style.display ==="none")
+    {
+        barra_menu.style.display ="flex"
+    }
+    else
+    {
+        barra_menu.style.display ="none"
+    }
     
 }
 
+document.getElementById("menu_icon_today").addEventListener("click",menu_icon_today)
+
+async function menu_icon_today(event)
+{
+    event.preventDefault();
+    var text_modo = document.getElementById("md_game");
+    text_modo.textContent ="Today 🎯";
+}
 
 
+document.getElementById("menu_icon_inf").addEventListener("click",menu_icon_inf)
+
+async function menu_icon_inf(event)
+{
+    event.preventDefault();
+    var text_modo = document.getElementById("md_game");
+    text_modo.textContent ="Infinito ♾️";
+}
 
 /* easter eggs */
 
