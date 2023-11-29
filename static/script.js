@@ -187,13 +187,13 @@ function checkWord(blocks) {
 }
 
 function animateBlocks(blocks) {
+    adicionar_letra_bloco(blocks.map(block => block.textContent).join(''));
     blocks.forEach((block, index) => {
         setTimeout(() => { 
             block.contentEditable = false; 
             block.style.transition = 'background-color 0.1s ease';
             block.style.backgroundColor = 'rgb(0, 164, 113)';
             block.classList.add('onda');
-            adicionar_letra_bloco(block.textContent);
         }, index * 40); 
     });
 }
@@ -210,7 +210,6 @@ function handleWrongWord(blocks) {
         if(block.textContent === x[parseInt(block.id)-1]) 
         {   
             block.style.backgroundColor = 'rgb(0, 164, 113)';
-            adicionar_letra_bloco(block.textContent);
         }
     });
     
@@ -219,13 +218,12 @@ function handleWrongWord(blocks) {
         {
             const countInX = Array.from(x).filter(letter => letter === block.textContent).length;
             const countInBlocks = Array.from(blocks).filter(b => b.textContent === block.textContent && (window.getComputedStyle(b).backgroundColor === 'rgb(249, 244, 148)' || window.getComputedStyle(b).backgroundColor === 'rgb(0, 164, 113)')).length;
-           
+            
 
             if(countInBlocks < countInX && window.getComputedStyle(block).backgroundColor === 'rgba(0, 95, 107, 0.3)') 
             {
                 block.classList.add('yshake');
                 block.style.backgroundColor = 'rgb(249, 244, 148)';
-                adicionar_letra_bloco(block.textContent);
             }
             else
             {
@@ -234,7 +232,6 @@ function handleWrongWord(blocks) {
                     block.classList.add('rshake');
                     block.style.transition = 'background-color 0.5s ease';
                     block.style.backgroundColor = 'rgb(232, 127, 127)'; 
-                    adicionar_letra_bloco(block.textContent);
                 }
             }
         }
@@ -245,10 +242,10 @@ function handleWrongWord(blocks) {
                 block.classList.add('rshake');
                 block.style.transition = 'background-color 0.5s ease';
                 block.style.backgroundColor = 'rgb(232, 127, 127)'; 
-                adicionar_letra_bloco( block.textContent);
             }
         }
     });
+    adicionar_letra_bloco(blocks.map(block => block.textContent).join(''));
 
     if (vida > 0) {
         createNewContainer();
@@ -259,12 +256,26 @@ function handleWrongWord(blocks) {
     }
 }
 
-function adicionar_letra_bloco(letra) 
+function adicionar_letra_bloco(word) 
 {
     var h = document.getElementById("letras_res");
-    if (h.textContent.includes(letra))
+    var usadas = document.getElementById("letras_des");
+    for(var i = 0; i<5; i++)
     {
-        h.textContent =  h.textContent.slice(h.textContent.search(letra));
+        if (h.textContent.includes(word[i]))
+        {
+            const index = h.textContent.search(word[i]);
+            h.textContent = h.textContent.replace(word[i], "");
+            h.textContent.trim();
+            h.textContent.replace(/(.)\1+/g, '$1');
+        }
+        if(!usadas.textContent.includes(word[i]))
+        {
+            var letras_usadas = usadas.textContent+word[i];
+            letras_usadas = letras_usadas.replace(/\s/g, ""); 
+            letras_usadas = letras_usadas.split('').sort().join(' '); 
+            usadas.textContent = letras_usadas;
+        }
     }
 
 }

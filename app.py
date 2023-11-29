@@ -290,6 +290,7 @@ def logout():
     logout_user()
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
+
 if __name__ == '__main__':
     get_today_word_database()
    # app.run(host='0.0.0.0', port=8080,debug=False)
