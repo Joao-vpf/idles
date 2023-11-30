@@ -22,7 +22,9 @@ def load_user(user_id):
     return user
 
 def get_db_connection():
-    return sqlite3.connect('banco.db')
+    conn =  sqlite3.connect('banco.db')
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
 
 def check_word_from_database(verif):
     with get_db_connection() as connection:
@@ -61,9 +63,9 @@ def get_today_word_database():
                 palavras_id = resultados[0]
                 consulta = "INSERT INTO palavra_dia(data_palavra, palavras_id) VALUES (date(), ?);"
                 cursor.execute(consulta, (palavras_id,))
-                #print(resultados[0])
+                print(resultados[0])
                 connection.commit()
-                
+              
         consulta = "SELECT palavra FROM palavras where id in (select palavras_id from palavra_dia where data_palavra = date());"
         resultados = cursor.execute(consulta).fetchone()
         if resultados:
@@ -76,11 +78,11 @@ def get_username_today_database(login):
     with get_db_connection() as connection:
         cursor = connection.cursor()
         login=login.lower()
-        consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.id = ? ) AND pld_id in (select palavras_id from palavra_dia where data_palavra = date());"
+        consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.username = ?) AND pld_id in (select id from palavra_dia where data_palavra = date());"
         cursor.execute(consulta, (login,))
         resultados = cursor.fetchall()
-        print(resultados[0])
-        return resultados[0]    
+        print(resultados[0][0])
+        return resultados[0][0]   
 
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
@@ -145,25 +147,21 @@ def update_login_senha_database(login, password,newpassword):
             return 1
         return -1
     
-def set_user_today(login, palavra, count_erro):
+def set_user_today(login, count_erro):
     with get_db_connection() as connection:
-        if(get_username_from_database(login) == 1):
+        if(get_username_from_database(login) == -1):
             login=login.lower()
             cursor = connection.cursor()
             consulta = "select id from palavra_dia where data_palavra = date()"
-            cursor.execute(consulta, (palavra))
-            palavra = cursor.fetchall()
+            cursor.execute(consulta)
+            id_palavra = cursor.fetchall()[0][0]
             
             consulta = "select id from user where username = ?"
-            cursor.execute(consulta, (login))
-            login = cursor.fetchall()
-            # ! terminar aqui 
-            consulta = "insert into today(count_erro, user_id, pld_id) values(?,?,?)"
-            cursor.execute(consulta, (count_erro,login,  palavra))
-            palavra = cursor.fetchall()
+            cursor.execute(consulta, (login,))
+            id_login = cursor.fetchall()[0][0]
             
-                
-        
+            consulta = "insert into today(count_erro, user_id, pld_id) values(?,?,?)"
+            cursor.execute(consulta, (count_erro,id_login,  id_palavra))
 
 def recuperar_todas_imagens():
     with get_db_connection() as connection:
@@ -335,9 +333,8 @@ def set_image():
 def set_today():
     data = request.get_json()
     username = data.get('username')
-    palavra = data.get('palavra')
     count_erro = data.get('count_erro')
-    conf = set_user_today(login=username, palavra=palavra, count_erro=count_erro)
+    conf = set_user_today(login=username,  count_erro=count_erro)
     return {'data': conf}
 
 

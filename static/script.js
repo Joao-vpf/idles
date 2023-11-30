@@ -1,6 +1,5 @@
 
 var vida = 7;
-var count;
 
 window.onload = function() {
     var username = localStorage.getItem('username');
@@ -9,13 +8,12 @@ window.onload = function() {
     {
         conf_login(username);
     }
-    count=0;
 }
 var x;
 
 async function search_x(tipo)
 {
-    if(tipo)
+    if(tipo == 1)
     {
         if (x===undefined)
         { 
@@ -25,10 +23,14 @@ async function search_x(tipo)
                 x= data.data;
             });
         }
+        var text_modo = document.getElementById("md_game");
+        text_modo.textContent ="Infinito ♾️";
+        localStorage.setItem("modogame", 1);
     }
     else
     {
-        if(verif_jogado(localStorage.getItem('username')) === 0)
+        const res = await verif_jogado(localStorage.getItem('username'));
+        if( res === 0)
         {
             fetch('/get_today')
             .then(response => response.json())
@@ -42,14 +44,18 @@ async function search_x(tipo)
             all_blocks.contentEditable = false;
             customAlert("Esse modo já foi jogado");
         }
+        var text_modo = document.getElementById("md_game");
+        text_modo.textContent ="Today 🎯";
+        localStorage.setItem("modogame", 0);
     }
 }
 
-function verif_jogado(username)
+async function verif_jogado(username)
 {
-    if(username)
+    var res=0;
+    if(username != null)
     {   
-        fetch('/get_user_today', {
+        await fetch('/get_user_today', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,16 +66,13 @@ function verif_jogado(username)
         })
         .then(response => response.json())
         .then(data => {
-            if(data.data === 1)
-            {
-                return 1;
-            }
+            res=data.data;
         })
         .catch(error => {
             console.error('Erro ao enviar a solicitação:', error);
         });
     }
-    return 0;
+    return res;
 }
 
 
@@ -197,15 +200,34 @@ function checkWord(blocks) {
                 last_block = -1;
                 removealert();
                 if (word === x) 
-                {   //! terminar aqui  set_user_today; passar count login e x
-                   
+                {  
+                    if(localStorage.getItem("modogame") == 0)
+                    {
+                        salvar_today();
+                    }
+                    else
+                    {
+                        // todo terminar o history
+                        console.log("falta a logica")
+                    }
                     animateBlocks(blocks);
                 } 
                 else 
                 {
-                    count +=1;
                     removeheart();
                     vida -= 1;
+                    if(vida == 0)
+                    {
+                        if(localStorage.getItem("modogame") == 0)
+                        {
+                            salvar_today();
+                        }
+                        else
+                        {
+                            // todo terminar o history
+                            console.log("falta a logica")
+                        }
+                    }
                     handleWrongWord(blocks);
                 }   
                 return 1;         
@@ -654,6 +676,7 @@ document.getElementById('perfilsair').addEventListener('click', sairconta);
 async function sairconta(event)
 {
     localStorage.removeItem('username');
+    localStorage.removeItem('modojogo');
     window.location.reload(); 
 }
 
@@ -896,7 +919,8 @@ async function menu_icon_today(event)
 {
     event.preventDefault();
     var text_modo = document.getElementById("md_game");
-    text_modo.textContent ="Today 🎯";
+    window.location.reload(); 
+    localStorage.setItem("modogame", 0);
 }
 
 
@@ -906,7 +930,26 @@ async function menu_icon_inf(event)
 {
     event.preventDefault();
     var text_modo = document.getElementById("md_game");
-    text_modo.textContent ="Infinito ♾️";
+    window.location.reload(); 
+    localStorage.setItem("modogame", 1);
+}
+
+async function salvar_today()
+{
+    await fetch('/set_today', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: localStorage.getItem('username'),
+            count_erro: 7-vida
+        }),
+    })
+    .then(response => response.json())
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
 }
 
 /* easter eggs */
