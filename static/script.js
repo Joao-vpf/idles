@@ -422,34 +422,39 @@ async function login(event)
     
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
+    if(!username || !password)
+    {
+        alert('Login falhou. Verifique suas credenciais.');
 
-
-    await fetch('/get_login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password,
-        }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if(data.data === 1)
-        {
-            localStorage.setItem('username', username);
-            conf_login(username);
-        }
-        else
-        {
-            alert('Login falhou. Verifique suas credenciais.');
-        }
-    })
-    .catch(error => {
-        console.error('Erro ao enviar a solicitação:', error);
-    });
-   
+    }
+    else
+    {
+        await fetch('/get_login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+                password: password,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.data === 1)
+            {
+                localStorage.setItem('username', username);
+                conf_login(username);
+            }
+            else
+            {
+                alert('Login falhou. Verifique suas credenciais.');
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar a solicitação:', error);
+        });
+    }
 }
 
 async function obterImagemDoUsuario(username) 
