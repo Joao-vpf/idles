@@ -70,6 +70,17 @@ def get_today_word_database():
             return resultados[0].upper()
         
         return -1   
+    
+    
+def get_username_today_database(login):
+    with get_db_connection() as connection:
+        cursor = connection.cursor()
+        login=login.lower()
+        consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.id = ? ) AND pld_id in (select palavras_id from palavra_dia where data_palavra = date());"
+        cursor.execute(consulta, (login,))
+        resultados = cursor.fetchall()
+        print(resultados[0])
+        return resultados[0]    
 
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
@@ -134,7 +145,25 @@ def update_login_senha_database(login, password,newpassword):
             return 1
         return -1
     
-
+def set_user_today(login, palavra, count_erro):
+    with get_db_connection() as connection:
+        if(get_username_from_database(login) == 1):
+            login=login.lower()
+            cursor = connection.cursor()
+            consulta = "select id from palavra_dia where data_palavra = date()"
+            cursor.execute(consulta, (palavra))
+            palavra = cursor.fetchall()
+            
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login))
+            login = cursor.fetchall()
+            # ! terminar aqui 
+            consulta = "insert into today(count_erro, user_id, pld_id) values(?,?,?)"
+            cursor.execute(consulta, (count_erro,login,  palavra))
+            palavra = cursor.fetchall()
+            
+                
+        
 
 def recuperar_todas_imagens():
     with get_db_connection() as connection:
@@ -193,6 +222,7 @@ def set_image_user(login, id_img):
         consulta = "update user set png_id=? where username=?;"
         cursor.execute(consulta, (id_img, login))
     
+
 @app.route('/')
 def index():
     return render_template('main.html')
@@ -214,6 +244,13 @@ def get_login():
     password = data.get('password')
     conf = get_login_from_database(login=username, password=password)
         
+    return jsonify({'data': conf})
+
+@app.route('/get_user_today', methods=['POST'])
+def get_user_today():
+    data = request.get_json()
+    username = data.get('username')
+    conf = get_username_today_database(login=username)
     return jsonify({'data': conf})
 
 @app.route('/check_word', methods=['POST'])
@@ -293,6 +330,16 @@ def set_image():
     #print(username, " ", id_image)
     conf = set_image_user(login=username, id_img = id_image)
     return {'data': conf}
+
+@app.route('/set_today', methods=['POST'])
+def set_today():
+    data = request.get_json()
+    username = data.get('username')
+    palavra = data.get('palavra')
+    count_erro = data.get('count_erro')
+    conf = set_user_today(login=username, palavra=palavra, count_erro=count_erro)
+    return {'data': conf}
+
 
 @app.route('/logout')
 @login_required

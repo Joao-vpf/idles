@@ -1,6 +1,6 @@
 
 var vida = 7;
-
+var count;
 
 window.onload = function() {
     var username = localStorage.getItem('username');
@@ -9,14 +9,13 @@ window.onload = function() {
     {
         conf_login(username);
     }
+    count=0;
 }
-
-
 var x;
 
 async function search_x(tipo)
 {
-    if(!tipo)
+    if(tipo)
     {
         if (x===undefined)
         { 
@@ -29,13 +28,48 @@ async function search_x(tipo)
     }
     else
     {
-        fetch('/get_today')
+        if(verif_jogado(localStorage.getItem('username')) === 0)
+        {
+            fetch('/get_today')
+            .then(response => response.json())
+            .then(data => {
+                x= data.data;
+            });
+        }
+        else
+        {
+            var all_blocks=document.getElementById("all_blocks");
+            all_blocks.contentEditable = false;
+            customAlert("Esse modo já foi jogado");
+        }
+    }
+}
+
+function verif_jogado(username)
+{
+    if(username)
+    {   
+        fetch('/get_user_today', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+            }),
+        })
         .then(response => response.json())
         .then(data => {
-            x= data.data;
+            if(data.data === 1)
+            {
+                return 1;
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao enviar a solicitação:', error);
         });
-        
     }
+    return 0;
 }
 
 
@@ -163,11 +197,13 @@ function checkWord(blocks) {
                 last_block = -1;
                 removealert();
                 if (word === x) 
-                {
+                {   //! terminar aqui  set_user_today; passar count login e x
+                   
                     animateBlocks(blocks);
                 } 
                 else 
                 {
+                    count +=1;
                     removeheart();
                     vida -= 1;
                     handleWrongWord(blocks);
