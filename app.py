@@ -162,6 +162,66 @@ def set_user_today(login, count_erro):
             
             consulta = "insert into today(count_erro, user_id, pld_id) values(?,?,?)"
             cursor.execute(consulta, (count_erro,id_login,  id_palavra))
+            
+            
+#!get hist
+def get_username_from_hist(login):
+     with get_db_connection() as connection:
+        login=login.lower()
+        cursor = connection.cursor()
+        consulta = "select id from user where username = ?"
+        cursor.execute(consulta,(login,))
+        id_user= cursor.fetchall()[0][0]
+        consulta = "SELECT count(*) FROM historico WHERE username=?;"
+        cursor.execute(consulta, (id_user,))
+        resultados = cursor.fetchall()
+        if resultados[0][0] == 1:
+            return -1
+        return 1
+#! get hist      
+            
+            
+#!insert hist
+def insert_user_palavra_hist(login):
+    with get_db_connection() as connection:
+        if get_username_from_database(login) == -1:
+            if get_username_from_hist(login) == -1:
+                login=login.lower()
+                cursor = connection.cursor()
+                consulta = "select id from user where username = ?"
+                cursor.execute(consulta,(login,))
+                id_user= cursor.fetchall()[0][0]
+                consulta = "insert into historico(score_palavra,user_id) values(0,?);"
+                cursor.execute(consulta, (id_user))
+                return 1
+            return 2
+        return -1
+#!insert hist
+
+
+#!update score
+def set_user_palavra_score_hist(login,score):
+    with get_db_connection() as connection:
+        if get_username_from_database(login) == -1:
+            login=login.lower()
+            cursor = connection.cursor()
+            consulta = "select id from palavra_dia where data_palavra = date()"
+            cursor.execute(consulta)
+            id_palavra = cursor.fetchall()[0][0]
+            if get_username_from_hist(login) == 1:
+                
+                consulta = "update historico set score_palavra = ? where user_id=?"
+                cursor.execute(consulta, (score,id_login))
+                id_login = cursor.fetchall()[0][0]
+                return 1
+            else:
+                insert_user_palavra_hist(login)
+                consulta = "update historico set score_palavra = ? where user_id=?"
+                cursor.execute(consulta, (score,id_login))
+                return 1
+        return -1   
+#! upscore score
+
 
 def recuperar_todas_imagens():
     with get_db_connection() as connection:
