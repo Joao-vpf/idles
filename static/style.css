@@ -266,6 +266,20 @@ form {
 	align-items: center;
 }
 
+/* Historico  */
+
+.info-hist{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
+}
+
+#infohist h2{
+  font: icon;
+  font-size: 25px;
+}
+
+
 /* Alerta */
 
 .alert {
@@ -511,6 +525,28 @@ form {
 }
 #barra_menu_icon .menu_icon_inf {
   grid-row: 3;
+}
+
+/* Next buttom */
+#button-next{
+  grid-column: 2;
+  box-sizing: border-box;
+  width: 350px;
+  grid-row: 4;
+}
+
+#button-next button{
+  padding: 10px;
+  width: 100px;
+  margin: 5px;
+  margin-right: 15px;
+  background-color: #1f7a46;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  float: right;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Animations */

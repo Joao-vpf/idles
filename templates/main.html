@@ -59,8 +59,8 @@
 				<div class="barra_menu_icon" id ="barra_menu_icon" style="display:none">
 					<div class="button_menu_icon_container" id="button_menu_icon_container"> 
 						<h1>Modos</h1>
-						<button type="button"  class="menu_icon_today" id="menu_icon_today">Today Palavras</button>
-						<button type="button"  class="menu_icon_inf" id="menu_icon_inf">Infite Palavras</button>
+						<button type="button"  class="menu_icon_today" id="menu_icon_today">Palavra do dia</button>
+						<button type="button"  class="menu_icon_inf" id="menu_icon_inf">Palavras infinitas</button>
 					</div>
 				</div> 
 			</div>
@@ -69,9 +69,9 @@
 		</wc-header>
 		
 		
-		<div class = "info-perfil" id ="infoperfil">
-			<div class="info-menu" id = "infomenu">
-				<div class="info-config" id = "infoconfig">
+		<div class = "info-perfil" id ="infoperfil" style="display: none;">
+			<div class="info-menu" id = "infomenu" >
+				<div class="info-config" id = "infoconfig" style="display: none;">
 					
 					<wc-header class="Config-header">
 						<h1>Configurações</h1>
@@ -102,6 +102,23 @@
 						<button type="button" class="del_but" id="del_but">Deletar</button>
 					</div>
 				</div>
+				<div class= "info-hist" id = "infohist" style="display: none;">
+					<wc-header class="Config-header">
+						<h1>Configurações</h1>
+					</wc-header>
+					
+					<div class="Score-hist">
+						<h2 id="maior_sequencia_inf">Maior sequencia modo infinito:</h2>
+					</div>
+
+					<div class="Today-hist">
+						<h2 id="plv_dia_verif">Palavra do dia:</h2>
+					</div>
+
+					<div class="Today-media-hist">
+						<h2>Trabalhando... 👷🏻‍♂️</h2>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -122,7 +139,7 @@
 			</div>
 
 			<div class="all_blocks" id="all_blocks">
-				<div class="blocks-container">
+				<div class="blocks-container" id ="blockscontainer">
 					<div class="input-block" id="1" contenteditable="true"></div>
 					<div class="input-block" id="2" contenteditable="true"></div>
 					<div class="input-block" id="3" contenteditable="true"></div>
@@ -140,6 +157,9 @@
 				<h3  class="letras_res" id="letras_res">A B C D E F G H I J K L M N O P Q R S T U V W X Y Z</h3>
 			</div>
 			
+			<div class="button-next" id="button-next" style="display:none">
+				<button type="button" class="next_bt" id="next_bt">Next</button>
+			</div>
 		</div>
 		
 		<div id="gallery"></div>

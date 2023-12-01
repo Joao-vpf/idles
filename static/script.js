@@ -40,12 +40,15 @@ async function search_x(tipo)
         }
         else
         {
-            var all_blocks=document.getElementById("all_blocks");
-            all_blocks.contentEditable = false;
+            var all_blocks=document.getElementsByClassName("input-block");
+            Array.from(all_blocks).forEach((block) => {
+                block.contentEditable = false; 
+               
+            });
             customAlert("Esse modo já foi jogado");
         }
         var text_modo = document.getElementById("md_game");
-        text_modo.textContent ="Today 🎯";
+        text_modo.textContent ="Palavra do dia 🎯";
         localStorage.setItem("modogame", 0);
     }
 }
@@ -80,6 +83,8 @@ async function verif_jogado(username)
 var last_block = -1; 
 
 document.addEventListener('keydown', (event) => {
+
+
     block = event.target;
     if (last_block !== -1 && ((event.key === 'Backspace' &&  document.activeElement.tagName !== 'INPUT') || event.key ===  'ArrowLeft' || (event.key === 'Enter' &&  document.activeElement.tagName !== 'INPUT')))
     {
@@ -119,7 +124,7 @@ document.addEventListener('keydown', (event) => {
     if (!block.classList.contains('input-block')) {
         return;
     }
-
+    removealert();
     const blocks = Array.from(block.parentNode.children);
     const index = blocks.indexOf(block);
     const key = event.key;
@@ -179,6 +184,14 @@ document.addEventListener('keydown', (event) => {
 });
 
 
+document.getElementById('next_bt').addEventListener('click', next);
+async function next()
+{
+
+    window.location.reload();
+}
+
+
 function checkWord(blocks) {
     const word = blocks.map(block => block.textContent).join('');
     if (word.length === 5) 
@@ -201,21 +214,22 @@ function checkWord(blocks) {
                 removealert();
                 if (word === x) 
                 {  
+                    animateBlocks(blocks);
                     if(localStorage.getItem("modogame") == 0)
                     {
                         salvar_today();
                     }
                     else
                     {
-                        // todo terminar o history
-                        console.log("falta a logica")
+                        const bt_next = document.getElementById("button-next");
+                        bt_next.style.display="block";
                     }
-                    animateBlocks(blocks);
                 } 
                 else 
                 {
                     removeheart();
                     vida -= 1;
+                    handleWrongWord(blocks);
                     if(vida == 0)
                     {
                         if(localStorage.getItem("modogame") == 0)
@@ -224,11 +238,10 @@ function checkWord(blocks) {
                         }
                         else
                         {
-                            // todo terminar o history
-                            console.log("falta a logica")
+                            const bt_next = document.getElementById("button-next");
+                            bt_next.style.display="block";
                         }
                     }
-                    handleWrongWord(blocks);
                 }   
                 return 1;         
             }
@@ -342,10 +355,16 @@ function adicionar_letra_bloco(word)
 function removealert()
 {
     var alertBox = document.getElementById('alert1');
-    alertBox.style.opacity = "0";
+    if (!alertBox.textContent.includes("A palavra era: "))
+    {
+        alertBox.style.opacity = "0";
+    }
 }
 
 function customAlert(msg) {
+
+    removealert();
+
     // Cria um novo elemento div
     var alertBox = document.getElementById('alert1');
     
@@ -413,7 +432,6 @@ async function abrirmenulogin()
 
 
 // Adiciona eventos aos botões
-// document.getElementById('historicoButton').addEventListener('click',  hist);
 document.getElementById("loginButton").addEventListener("click", login);
 
 async function login(event) 
@@ -476,13 +494,44 @@ async function obterImagemDoUsuario(username)
     }
 }
 
+async function obterhistoriodousuario(username)
+{
+    //! ARRUMAR 
+    //! ARRUMAR
+    await fetch('/get_hist', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: username,
+            password: password,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.data === 1)
+        {
+            localStorage.setItem('username', username);
+            conf_login(username);
+        }
+        else
+        {
+            alert('Login falhou. Verifique suas credenciais.');
+        }
+    })
+    .catch(error => {
+        console.error('Erro ao enviar a solicitação:', error);
+    });
+}
+
 async function conf_login(username)
 {
     document.getElementById('username_perfil').textContent = username;
     document.getElementById('loginBlock').remove();
     document.getElementById('perfilBlock').style.display = 'flex';
 
-
+    obterhistoriodousuario(username);
     obterImagemDoUsuario(username);
 
     switch(username)
@@ -589,19 +638,74 @@ async function confirmarcriarconta(event)
 
 /* POS LOGIN*/
 
+document.getElementById('historicoButton').addEventListener('click',  hist);
+
+async function hist(event)
+{
+    event.preventDefault(); 
+    if (document.getElementById('infoperfil').style.display === 'none')
+    {
+        document.getElementById('infoperfil').style.display = 'flex';
+        document.getElementById('infohist').style.display = 'flex';
+        carregar_hist();
+    }
+    else
+    {
+        if ( document.getElementById('infoconfig').style.display === 'none')
+        {
+            document.getElementById('infohist').style.display = 'none';
+            document.getElementById('infoperfil').style.display = 'none';
+        }
+        else
+        {
+            carregar_hist();
+            document.getElementById('infohist').style.display = 'flex';
+            document.getElementById('infoconfig').style.display = 'none';
+        }
+    }
+   
+}
+
+
+async function carregar_hist()
+{
+    const plv_dia = document.getElementById("plv_dia_verif");
+    plv_dia.textContent="Palavra do dia:";
+    const res = await verif_jogado(localStorage.getItem('username'));
+    if (res === 1)
+    {
+        plv_dia.textContent+="✅" ;  
+    }
+    else
+    {
+        plv_dia.textContent+="❌";
+    }
+
+}
 
 document.getElementById('configuracoesButton').addEventListener('click', config);
 async function config(event)
 {
     event.preventDefault(); 
-    if(document.getElementById('infoperfil').style.display === 'flex')
+
+    if (document.getElementById('infoperfil').style.display === 'none')
     {
-		document.getElementById('infoperfil').style.display = 'none';
-	}
-	else
-	{
-		document.getElementById('infoperfil').style.display = 'flex';
-	}
+        document.getElementById('infoperfil').style.display = 'flex';
+        document.getElementById('infoconfig').style.display = 'flex';
+    }
+    else
+    {
+        if ( document.getElementById('infohist').style.display === 'none')
+        {
+            document.getElementById('infoconfig').style.display = 'none';
+            document.getElementById('infoperfil').style.display = 'none';
+        }
+        else
+        {
+            document.getElementById('infoconfig').style.display = 'flex';
+            document.getElementById('infohist').style.display = 'none';
+        }
+    }
 		
 }
 
