@@ -225,7 +225,38 @@ def set_image_user(login, id_img):
         cursor = connection.cursor()
         consulta = "update user set png_id=? where username=?;"
         cursor.execute(consulta, (id_img, login))
-    
+
+
+#!get  hist 
+def  get_historico_from_database(login):
+    with get_db_connection() as connection:
+        if get_username_from_database(login) == -1:
+            cursor = connection.cursor()
+            login=login.lower()
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login,))
+            user_id = cursor.fetchall()[0][0]
+            consulta = "select count(*) from historico where user_id=?;"
+            cursor.execute(consulta, (user_id,))
+            return -1
+        return 1  
+#!get  hist
+
+
+#!set score_palavra
+def set_score_palavra_from_hist(login,score):
+    with get_db_connection() as connection:
+        if get_historico_from_database(login) == -1:
+            cursor = connection.cursor()
+            login=login.lower()
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login,))
+            user_id = cursor.fetchall()[0][0]
+            consulta = "update historico set score_palavra=? where user_id=?;"
+            cursor.execute(consulta, (score,user_id))
+            return 1
+        return -1  
+#!set score_palavra
 
 @app.route('/')
 def index():
