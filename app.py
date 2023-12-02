@@ -222,9 +222,12 @@ def get_user_id_image(login):
 def set_image_user(login, id_img):
     with get_db_connection() as connection:
         login=login.lower()
+        if(login == "napoleao"):
+            return -1
         cursor = connection.cursor()
         consulta = "update user set png_id=? where username=?;"
         cursor.execute(consulta, (id_img, login))
+        return 1
 
 
 #!get  hist 

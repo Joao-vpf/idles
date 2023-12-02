@@ -700,6 +700,11 @@ async function alter_senha(event) {
 
     }
 
+    if (username == "napoleao")
+    {
+        alert("Não pode alterar um easter egg");
+        return -1;
+    }
 
     event.preventDefault();
     await fetch('/alter_senha', {
@@ -751,6 +756,14 @@ async function alter_user(event) {
         return -1;
     }
 
+    
+    if (username == "napoleao")
+    {
+        alert("Não pode alterar um easter egg");
+        return -1;
+    }
+
+
     event.preventDefault();
     await fetch('/alter_user', {
         method: 'POST',
@@ -789,13 +802,7 @@ document.getElementById('alter_img').addEventListener('click', alter_img);
 
 async function alter_img(event) {
     event.preventDefault();
-    
-    if(username !== "napoleao")
-    {
-        alert("Não pode alterar um easter egg");
-        return -1;
-    } 
-    
+
     const overlay = document.getElementById('overlay');
     const gallery = document.getElementById('gallery');
     const selectedImage = document.getElementById('selectedImage');
@@ -851,6 +858,13 @@ async function substituirImagemPerfil(src, imageId) {
     const perfilIcon = document.getElementById('perfilIcon');
     perfilIcon.src = src;
     perfilIcon.style.borderRadius = '50%';
+
+    if (localStorage.getItem('username') == "napoleao")
+    {
+        alert("Não pode alterar um easter egg");
+        return -1;
+    }
+
     await fetch('/set_image', {
         method: 'POST',
         headers: {
