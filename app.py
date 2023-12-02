@@ -5,7 +5,6 @@ from PIL import Image
 from io import BytesIO
 import base64
 import sqlite3
-import numpy as np
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
