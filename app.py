@@ -5,6 +5,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 import sqlite3
+import numpy as np
 
 app = Flask(__name__)
 login_manager = LoginManager(app)
@@ -257,6 +258,59 @@ def set_score_palavra_from_hist(login,score):
             return 1
         return -1  
 #!set score_palavra
+
+
+#!return score_palavra
+def get_score_palavra_from_hist(login):
+    with get_db_connection() as connection:
+        if get_historico_from_database(login) == -1:
+            cursor = connection.cursor()
+            login=login.lower()
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login,))
+            user_id = cursor.fetchall()[0][0]
+            consulta = "select score_palavra from historico where user_id=?;"
+            cursor.execute(consulta, (user_id,))
+            res = cursor.fetchall()[0][0]
+            return res
+        return -1  
+#!retutn score_palavra
+
+
+
+#!return 5 ultimos jogos
+#?nao testei
+
+def get_last_5_games(login):
+    with get_db_connection() as connection:
+        if get_username_from_database(login) == -1:
+            cursor = connection.cursor()
+            login=login.lower()
+            consulta = "select id from palavra_dia order by data_palavra desc limit 5;"
+            cursor.execute(consulta)
+            palavras_passadas=cursor.fetchall()[0]
+            res=[0,0,0,0,0]
+            for i in range(5):
+                consulta = "select count(*) from today where pld_id=? and user_id=?;"
+                cursor.execute(consulta,(palavras_passadas[i],login))
+                aux=cursor.fetchall()[0][0]
+                if aux == 1:
+                    consulta = "select count_erro from today where pld_id=? and user_id=?;"
+                    cursor.execute(consulta,(palavras_passadas[i],login))
+                    res[i]=cursor.fetchall()[0][0]
+            return res
+        return -1
+
+
+                    
+                
+                
+                
+        
+
+#!return 5 ultimos jogos
+
+
 
 @app.route('/')
 def index():

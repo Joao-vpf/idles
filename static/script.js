@@ -505,7 +505,6 @@ async function obterhistoriodousuario(username)
         },
         body: JSON.stringify({
             username: username,
-            password: password,
         }),
     })
     .then(response => response.json())
