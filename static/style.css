@@ -5,12 +5,12 @@ body {
 
 /* Game Styles */
 .game {
-  position: relative;
-  z-index: 300;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+	position:relative;
+	z-index: 300;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
 }
 
 /* Menu Styles */
@@ -29,7 +29,7 @@ body {
   grid-gap: 0;
 }
 
-.menu h1 {
+.menu h1{
   grid-column: 3;
   font-weight: 600;
   font-size: 4vh;
@@ -62,83 +62,223 @@ body {
   height: 40px;
   border-radius: 50%;
   cursor: pointer;
-}
+}    
+
 
 .perfil-menu {
-  grid-column: 5;
-  display: none;
-  position: relative;
+	grid-column: 5;
+	display: none;
+	position: relative;
   place-content: center;
   right: 95px;
-  width: 200px;
-  padding: 15px;
-  background-color: #fff;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 150;
+	width: 200px;
+	padding: 15px;
+	background-color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	z-index: 150;
 }
+
+.login-block
+{
+  display: block;
+  justify-content: center;
+  align-items: center;
+}
+
+.perfil-block
+{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    position: relative;
+  
+}
+
+.button-container-perfil
+{
+  justify-content: center;
+  align-items: center;
+  display: grid;
+}
+
+#buttoncontainerperfil .perfilsair{
+  background: #eea1a1;
+	color: #f73636
+}
+
+#buttoncontainerperfil .perfilsair:hover{
+	background: #f73636;
+	color: #eea1a1;
+}
+
+
+form {
+  text-align: center; 
+}
+
+/* Reduza o tamanho dos campos de input */
+#username,
+#password {
+  outline: none;
+  width: 60px; 
+  padding: 8px; 
+}
+
+
+#loginBlock input {
+  outline: none;
+  width: 100px; 
+  padding: 8px; 
+  margin: 5px;
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#loginBlock button-container {
+  position: relative;
+  justify-content:right;
+  display: flex;
+}
+
+#perfilMenu button {
+  padding: 5px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#perfilMenu .criar-conta{
+  background-color: #4b1c8d;
+}
+
 
 /* Cria conta  */
 
-#perfilMenu .criar-conta-block {
-  margin: 5px;
-  position: relative;
-  flex-direction: column;
+#perfilMenu .criar-conta-block{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
   text-align: -webkit-center;
 }
 
-/* Após login */
 
-.perfil-block {
-  display: flex;
-  flex-direction: column;
+#criarcontaBlock input{
+  outline: none;
+  width: 100px; 
+  padding: 8px; 
+  margin: 5px;
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
+  border-radius: 5px;
+  cursor: pointer;
+  display: list-item;
 }
 
-.perfil-block h1 {
+#criarcontaBlock button{
+  padding: 5px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Apos login */
+-block
+.perfil-block {
+  display: flex;
+  flex-direction: column; 
+}
+
+.perfil-block h1{
   font-family: 'Georgia', serif;
   font-size: 1em;
 }
 
 /* Info perfil */
 
-.info-perfil {
-  display: none;
-  position: absolute;
-  top: 100px;
-  width: 450px;
-  height: 490px;
-  border-radius: 7%;
-  background-color: #fff;
+.info-perfil{
+	display: none;
+	position: absolute;
+	top: 100px;
+	width: 450px;
+	height: 490px;
+	border-radius: 7%;
+	background-color: #fff;
   padding: 5px;
   box-sizing: border-box;
-  z-index: 150;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	z-index: 150;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.info-config{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
+}
+
+#infoconfig h2{
+	font-size: 1.3em;
+}
+
+#infoconfig input{
+  outline: none;
+  width: 100px; 
+  padding: 8px; 
+  background-color: #FFF;
+  border: 1px solid #D3D3D3;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#infoconfig button {
+  padding: 10px;
+  margin: 2px;
+  background-color: #2d65d5;
+  color: rgb(255, 255, 255);
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+#infoconfig .del_but{
+	background: #f5f2f2;
+	color: #f73636
+}
+
+#infoconfig .del_but:hover{
+	background: #f73636;
+	color: #fbe3e3;
+}
+
+.Config-header{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 /* Historico  */
 
-.info-hist {
-  margin: 5px;
-  position: relative;
-  flex-direction: column;
+.info-hist{
+	margin: 5px;
+	position: relative;
+	flex-direction: column;
 }
 
-#infohist h2 {
+#infohist h2{
   font: icon;
   font-size: 25px;
 }
 
-/* Main */
-
-.main {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr;
-  gap: 20px;
-  justify-content: center;
-}
 
 /* Alerta */
 
@@ -149,7 +289,7 @@ body {
   z-index: 100;
   background-color: rgba(0, 95, 107, 0.3);
   font-family: 'Mitr', sans-serif;
-  color: #ffffff;
+  color: #ffffff; /* Changed from white to #ffffff for better visibility */
   font-weight: 600;
   display: flex;
   justify-content: center;
@@ -160,23 +300,40 @@ body {
   margin: 0 auto;
   padding: 0.4em 1.5em;
   border-radius: 0.4em;
-  text-shadow: 1px 1px 1.5px rgba(0, 0, 0, 0.3);
+  text-shadow: 1px 1px 1.5px rgba(0, 0, 0,0.3); 
 }
 
-/* Life Styles */
-
-.life {
+/*Life Styles */
+.life{
   grid-column: 2;
   justify-content: center;
   align-items: center;
   display: flex;
 }
 
-/* Blocks Container Styles */
+/*Heart Styles */
+.heart{
+  padding: 10.5px;
+}
 
+/* Main */
+
+.main
+{
+	position:relative;
+	z-index: 1;
+	display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows:1fr;
+  gap: 20px; 
+  justify-content: center; /* Centraliza horizontalmente */
+}
+
+/* Blocks Container Styles */
 #all_blocks {
   grid-column: 2;
 }
+
 
 .blocks-container {
   display: flex;
@@ -186,7 +343,6 @@ body {
 }
 
 /* Input Block Styles */
-
 .input-block {
   border: 3px solid #008c9e;
   background-color: rgba(0, 95, 107, 0.3);
@@ -209,7 +365,7 @@ body {
   line-height: 1em;
   cursor: pointer;
   caret-color: transparent;
-  text-shadow: 1px 1px 1.5px rgba(0, 0, 0, 0.5);
+  text-shadow: 1px 1px 1.5px rgba(0, 0, 0,0.5); 
 }
 
 .input-block:focus {
@@ -217,50 +373,8 @@ body {
   border-bottom: 7px solid rgba(0, 95, 107, 0.3);
 }
 
-/* Letras usadas */
-
-#letras_used {
-  grid-column: 3;
-  margin: 1px;
-  border: 3px solid #008c9e;
-  background-color: rgba(0, 95, 107, 0.3);
-  width: 350px;
-  font-family: 'Mitr', sans-serif;
-  color: white;
-  border-radius: 10%;
-  display: flex;
-  max-height: 300px;
-  box-sizing: border-box;
-  font-size: 1.25em;
-  line-height: 1.30em;
-  flex-direction: column;
-  font-size: 17.5px;
-  cursor: pointer;
-  padding: 10px;
-  caret-color: transparent;
-  text-align: justify;
-  text-shadow: 1px 1px 1.5px rgba(0, 0, 0, 0.7);
-}
-
-#letras_used h2 {
-  margin: 10px;
-  color: white;
-}
-
-#letras_used .l_des {
-  color: rgb(232, 127, 127);
-}
-
-#letras_used .l_res {
-  color: rgb(7, 220, 152);
-}
-
-#letras_used h3 {
-  margin: 10px;
-  text-align: justify;
-}
-
 /* Config image perfil */
+
 
 #gallery {
   display: none;
@@ -270,7 +384,7 @@ body {
   margin: 5px;
   box-sizing: border-box;
   max-height: 350px;
-  overflow-y: auto;
+  overflow-y: auto; 
   padding: 7px;
   border-radius: 2%;
   background-color: #fff;
@@ -282,22 +396,73 @@ body {
   height: 100px;
   object-fit: cover;
   cursor: pointer;
-  z-index: 9998;
+  z-index: 9998; 
 }
 
 .overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 9997; 
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Cor e opacidade do overlay */
+    z-index: 9997; /* Um valor abaixo do z-index do gallery para ficar por trás dele */
 }
 
-/* Menu modos */
+/* Letras usadas */
 
+#letras_used{
+    grid-column: 3;
+    margin: 1px;
+    border: 3px solid #008c9e;
+    background-color: rgba(0, 95, 107, 0.3);
+    width: 350px;
+    font-family: 'Mitr', sans-serif;
+    color: white;
+    border-radius: 10%;
+    display: flex;
+    max-height: 300px;
+    box-sizing: border-box;
+    font-size: 1.25em;
+    line-height: 1.30em;
+    flex-direction: column;
+    font-size: 17.5px;
+    cursor: pointer;
+    padding: 10px;
+    caret-color: transparent;
+    text-align: justify;
+    text-shadow: 1px 1px 1.5px rgba(0, 0, 0,0.7); 
+}
+
+
+#letras_used h2{
+  margin: 10px;
+  color: white;
+  
+}
+
+#letras_used .l_des
+{
+  color:rgb(232, 127, 127);
+}
+
+#letras_used .l_res
+{
+  color:rgb(7, 220, 152);
+}
+
+
+#letras_used h3{
+  margin: 10px;
+  text-align: justify;
+}
+
+
+/* Icons header */
+
+/* Menu modos */
+/* todo aqui po*/
 #icon-menu-container {
   grid-column: 1;
   grid-row: 1;
@@ -309,16 +474,16 @@ body {
   border-radius: 50%;
   z-index: 100;
 }
-
+   
 #icon-menu-container img {
   width: 47px;
   height: 47px;
   cursor: pointer;
-}
+}  
 
 #barra_menu_icon {
   grid-column: 1;
-  position: absolute;
+	position: absolute;
   top: 100%;
   width: 200px;
   padding: 15px;
@@ -326,20 +491,23 @@ body {
   border-radius: 5px;
   box-shadow: 0 0 10px rgb(0 0 0 / 30%);
   justify-content: center;
+  
 }
 
-#button_menu_icon_container {
+#button_menu_icon_container 
+{
   justify-content: center;
   align-items: center;
   display: grid;
 }
 
-#barra_menu_icon h1 {
+#barra_menu_icon  h1{
   grid-column: 1;
   grid-row: 1;
   font-family: 'Georgia', serif;
   font-size: 1em;
 }
+
 
 #barra_menu_icon button {
   grid-column: 1;
@@ -355,21 +523,19 @@ body {
 #barra_menu_icon .menu_icon_today {
   grid-row: 2;
 }
-
 #barra_menu_icon .menu_icon_inf {
   grid-row: 3;
 }
 
 /* Next buttom */
-
-#button-next {
+#button-next{
   grid-column: 2;
   box-sizing: border-box;
   width: 350px;
   grid-row: 4;
 }
 
-#button-next button {
+#button-next button{
   padding: 10px;
   width: 100px;
   margin: 5px;
@@ -380,27 +546,26 @@ body {
   border-radius: 5px;
   cursor: pointer;
   float: right;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
 /* Animations */
-
 @keyframes onda {
-  0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
-  5%, 95% { transform: translate(0px, -2px) rotate(0deg); }
-  10%, 90% { transform: translate(0px, -4px) rotate(0deg); }
-  15%, 85% { transform: translate(0px, -6px) rotate(0deg); }
-  20%, 80% { transform: translate(0px, -8px) rotate(0deg); }
-  25%, 75% { transform: translate(0px, -10px) rotate(0deg); }
-  30%, 70% { transform: translate(0px, -12px) rotate(0deg); }
-  35%, 65% { transform: translate(0px, -14px) rotate(0deg); }
-  40%, 60% { transform: translate(0px, -16px) rotate(0deg); }
-  45%, 55% { transform: translate(0px, -18px) rotate(0deg); }
-  50% { transform: translate(0px, -20px) rotate(0deg); }
+0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+5%, 95% { transform: translate(0px, -2px) rotate(0deg); }
+10%, 90% { transform: translate(0px, -4px) rotate(0deg); }
+15%, 85% { transform: translate(0px, -6px) rotate(0deg); }
+20%, 80% { transform: translate(0px, -8px) rotate(0deg); }
+25%, 75% { transform: translate(0px, -10px) rotate(0deg); }
+30%, 70% { transform: translate(0px, -12px) rotate(0deg); }
+35%, 65% { transform: translate(0px, -14px) rotate(0deg); }
+40%, 60% { transform: translate(0px, -16px) rotate(0deg); }
+45%, 55% { transform: translate(0px, -18px) rotate(0deg); }
+50% { transform: translate(0px, -20px) rotate(0deg); }
 }
 
 .onda {
-  animation: onda 0.5s;
+animation: onda 0.5s;
 }
 
 @keyframes shake {
@@ -414,29 +579,29 @@ body {
 }
 
 @keyframes rshake {
-  0%, 100% { transform: translate(1px, 0) rotate(5deg); }
-  10%, 90% { transform: translate(-1px, 0) rotate(-5deg); }
-  20%, 80% { transform: translate(-2px, 0) rotate(5deg); }
-  30%, 70% { transform: translate(2px, 0) rotate(-5deg); }
-  40%, 60% { transform: translate(1px, 0) rotate(5deg); }
-  50% { transform: translate(-1px, 0) rotate(-5deg); }
+0%, 100% { transform: translate(1px, 0) rotate(5deg); }
+10%, 90% { transform: translate(-1px, 0) rotate(-5deg); }
+20%, 80% { transform: translate(-2px, 0) rotate(5deg); }
+30%, 70% { transform: translate(2px, 0) rotate(-5deg); }
+40%, 60% { transform: translate(1px, 0) rotate(5deg); }
+50% { transform: translate(-1px, 0) rotate(-5deg); }
 }
 
 .rshake {
-  animation: rshake 0.8s;
+animation: rshake 0.8s;
 }
 
 @keyframes yshake {
-  0%, 100% { transform: translate(1px, 0) rotate(2deg); }
-  10%, 90% { transform: translate(-1px, 0) rotate(-2deg); }
-  20%, 80% { transform: translate(-2px, 0) rotate(2deg); }
-  30%, 70% { transform: translate(2px, 0) rotate(-2deg); }
-  40%, 60% { transform: translate(1px, 0) rotate(2deg); }
-  50% { transform: translate(-1px, 0) rotate(-2deg); }
+0%, 100% { transform: translate(1px, 0) rotate(2deg); }
+10%, 90% { transform: translate(-1px, 0) rotate(-2deg); }
+20%, 80% { transform: translate(-2px, 0) rotate(2deg); }
+30%, 70% { transform: translate(2px, 0) rotate(-2deg); }
+40%, 60% { transform: translate(1px, 0) rotate(2deg); }
+50% { transform: translate(-1px, 0) rotate(-2deg); }
 }
 
 .yshake {
-  animation: yshake 0.5s;
+animation: yshake 0.5s;
 }
 
 @keyframes grow {
@@ -452,7 +617,7 @@ body {
 /* Easter eggs */
 
 #player-container {
-  display: none; 
+  display: none; /* Inicialmente, oculta o player */
  
   justify-content: center;
   align-items: center;
