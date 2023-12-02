@@ -32,7 +32,7 @@ async function search_x(tipo)
         const res = await verif_jogado(localStorage.getItem('username'));
         if( res === 0)
         {
-            fetch('/get_today')
+            await fetch('/get_today')
             .then(response => response.json())
             .then(data => {
                 x= data.data;
@@ -43,7 +43,7 @@ async function search_x(tipo)
             var all_blocks=document.getElementsByClassName("input-block");
             Array.from(all_blocks).forEach((block) => {
                 block.contentEditable = false; 
-               
+            
             });
             customAlert("Esse modo já foi jogado");
         }
@@ -52,6 +52,8 @@ async function search_x(tipo)
         localStorage.setItem("modogame", 0);
     }
 }
+
+
 
 async function verif_jogado(username)
 {
