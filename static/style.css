@@ -206,8 +206,8 @@ form {
 /* Info perfil */
 
 .info-perfil{
-	display: none;
 	position: absolute;
+  justify-content: center;
 	top: 100px;
 	width: 450px;
 	height: 490px;
@@ -275,10 +275,65 @@ form {
 }
 
 #infohist h2{
-  font: icon;
-  font-size: 25px;
+  font-family: 'Mitr', sans-serif;
+  font-size: 23px;
+  margin-bottom: 2px;
 }
 
+
+#Today-media-hist {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 150px;
+  align-self: center;
+  margin-top: 20px;
+}
+
+#Today-media-hist h2 {
+  text-align: center;
+  font-size: 17px;
+  width: 100%;
+}
+
+#maior_sequencia_infres{
+  font-weight: normal;
+}
+
+#plv_dia_verifres{
+  font-weight: normal;
+}
+
+.barras_hist {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
+.barras_hist .bar_hist {
+  width: 20%;
+  background-color: #3498db;
+  transition: height 0.5s;
+  min-height: 10px;
+  min-width: 50px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3); 
+  text-align: center;
+}
+
+.barras_hist .bar_hist:hover {
+  background-color: #58b4f1; /* Nova cor ao passar o mouse sobre a barra */
+}
+
+.barras_hist .bar_container {
+  text-align: center;
+}
+
+.barras_hist .bar_label {
+  display: block;
+  margin-top: 5px; 
+}
 
 /* Alerta */
 

@@ -52,7 +52,7 @@ def get_today_word_database():
     with get_db_connection() as connection:
         cursor = connection.cursor()
 
-        consulta = "SELECT COUNT(*) FROM palavra_dia WHERE data_palavra = date();"
+        consulta = "SELECT COUNT(*) FROM palavra_dia WHERE data_palavra = date('now');"
         resultados = cursor.execute(consulta).fetchone()
 
         if resultados[0] == 0:
@@ -61,12 +61,12 @@ def get_today_word_database():
 
             if resultados:
                 palavras_id = resultados[0]
-                consulta = "INSERT INTO palavra_dia(data_palavra, palavras_id) VALUES (date(), ?);"
+                consulta = "INSERT INTO palavra_dia(data_palavra, palavras_id) VALUES (date('now'), ?);"
                 cursor.execute(consulta, (palavras_id,))
                 print(resultados[0])
                 connection.commit()
               
-        consulta = "SELECT palavra FROM palavras where id in (select palavras_id from palavra_dia where data_palavra = date());"
+        consulta = "SELECT palavra FROM palavras where id in (select palavras_id from palavra_dia where data_palavra = date('now'));"
         resultados = cursor.execute(consulta).fetchone()
         if resultados:
             return resultados[0].upper()
@@ -78,7 +78,7 @@ def get_username_today_database(login):
     with get_db_connection() as connection:
         cursor = connection.cursor()
         login=login.lower()
-        consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.username = ?) AND pld_id in (select id from palavra_dia where data_palavra = date());"
+        consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.username = ?) AND pld_id in (select id from palavra_dia where data_palavra = date('now'));"
         cursor.execute(consulta, (login,))
         resultados = cursor.fetchall()
         print(resultados[0][0])
@@ -158,7 +158,7 @@ def set_user_today(login, count_erro):
         if(get_username_from_database(login) == -1):
             login=login.lower()
             cursor = connection.cursor()
-            consulta = "select id from palavra_dia where data_palavra = date()"
+            consulta = "select id from palavra_dia where data_palavra = date('now')"
             cursor.execute(consulta)
             id_palavra = cursor.fetchall()[0][0]
             
@@ -230,7 +230,6 @@ def set_image_user(login, id_img):
         return 1
 
 
-#!get  hist 
 def  get_historico_from_database(login):
     with get_db_connection() as connection:
         if get_username_from_database(login) == -1:
@@ -243,10 +242,21 @@ def  get_historico_from_database(login):
             cursor.execute(consulta, (user_id,))
             return -1
         return 1  
-#!get  hist
+
+def set_historico_from_database(login):
+    with get_db_connection() as connection:
+        if get_username_from_database(login) == 1:
+            cursor = connection.cursor()
+            login=login.lower()
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login,))
+            user_id = cursor.fetchall()[0][0]
+            consulta = "insert into historico(score_palavra, user_id) values(?,?);"
+            cursor.execute(consulta, (0,user_id))
+            return 1
+    return -1 
 
 
-#!set score_palavra
 def set_score_palavra_from_hist(login,score):
     with get_db_connection() as connection:
         if get_historico_from_database(login) == -1:
@@ -255,14 +265,18 @@ def set_score_palavra_from_hist(login,score):
             consulta = "select id from user where username = ?"
             cursor.execute(consulta, (login,))
             user_id = cursor.fetchall()[0][0]
-            consulta = "update historico set score_palavra=? where user_id=?;"
-            cursor.execute(consulta, (score,user_id))
-            return 1
+            
+            consulta = "select score_palavra from historico where user_id = ?"
+            cursor.execute(consulta, (user_id,))
+            value = int(cursor.fetchall()[0][0])
+            if(value == int(score)-1):
+                #Score so pode ser alterado se for maior em 1
+                consulta = "update historico set score_palavra=? where user_id=?;"
+                cursor.execute(consulta, (score,user_id))
+                return 1
         return -1  
-#!set score_palavra
 
 
-#!return score_palavra
 def get_score_palavra_from_hist(login):
     with get_db_connection() as connection:
         if get_historico_from_database(login) == -1:
@@ -276,41 +290,46 @@ def get_score_palavra_from_hist(login):
             res = cursor.fetchall()[0][0]
             return res
         return -1  
-#!retutn score_palavra
 
 
 
 #!return 5 ultimos jogos
-#?nao testei
 
 def get_last_5_games(login):
     with get_db_connection() as connection:
         if get_username_from_database(login) == -1:
             cursor = connection.cursor()
             login=login.lower()
+            consulta = "select id from user where username = ?"
+            cursor.execute(consulta, (login,))
+            user_id = cursor.fetchall()[0][0]
+            
+            consulta = "select palavras_id from palavra_dia order by data_palavra desc limit 5;"
+            cursor.execute(consulta)
+            palavras_passadas = [row[0] for row in cursor.fetchall()]
+            palavras_passadas = palavras_passadas[::-1]
             consulta = "select id from palavra_dia order by data_palavra desc limit 5;"
             cursor.execute(consulta)
-            palavras_passadas=cursor.fetchall()[0]
-            res=[0,0,0,0,0]
+            id_todays_passadas = [row[0] for row in cursor.fetchall()]
+            id_todays_passadas = id_todays_passadas[::-1]
+            res = [[-1,""], [-1,""],[-1,""],[-1,""], [-1,""]]
             for i in range(5):
                 consulta = "select count(*) from today where pld_id=? and user_id=?;"
-                cursor.execute(consulta,(palavras_passadas[i],login))
-                aux=cursor.fetchall()[0][0]
+                cursor.execute(consulta, (id_todays_passadas[i], user_id))
+                aux = int(cursor.fetchall()[0][0])
                 if aux == 1:
                     consulta = "select count_erro from today where pld_id=? and user_id=?;"
-                    cursor.execute(consulta,(palavras_passadas[i],login))
-                    res[i]=cursor.fetchall()[0][0]
+                    cursor.execute(consulta, (id_todays_passadas[i], user_id))
+                    res[i][0] = int(cursor.fetchall()[0][0])
+                consulta = "select palavra from palavras where id=?;"
+                cursor.execute(consulta, (palavras_passadas[i],))
+                res[i][1] = cursor.fetchall()[0][0]
+                print(res[i])
             return res
         return -1
 
-
-                    
-                
-                
-                
-        
-
 #!return 5 ultimos jogos
+
 
 
 
@@ -356,7 +375,7 @@ def set_conta():
     username = data.get('username')
     password = data.get('password')
     conf = insert_login_in_database(login=username, password=password)
-    
+    conf = set_historico_from_database(login=username)
     return jsonify({'data': conf})
 
 @app.route('/del_conta', methods=['POST'])
@@ -428,6 +447,22 @@ def set_today():
     username = data.get('username')
     count_erro = data.get('count_erro')
     conf = set_user_today(login=username,  count_erro=count_erro)
+    return {'data': conf}
+
+@app.route('/get_hist', methods=['POST'])
+def get_hist():
+    data = request.get_json()
+    username = data.get('username')
+    conf = get_historico_from_database(login=username)
+    return {'data': conf, 'best_score':get_score_palavra_from_hist(login=username), 'last_5_today': get_last_5_games(login=username)}
+
+
+@app.route('/set_new_score_game', methods=['POST'])
+def set_new_score_game():
+    data = request.get_json()
+    username = data.get('username')
+    wins = data.get('wins')
+    conf = set_score_palavra_from_hist(login=username, score=wins)
     return {'data': conf}
 
 

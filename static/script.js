@@ -189,6 +189,22 @@ document.addEventListener('keydown', (event) => {
 document.getElementById('next_bt').addEventListener('click', next);
 async function next()
 {
+    await fetch('/set_new_score_game', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            username: localStorage.getItem("username"),
+            wins: localStorage.getItem("vitorias"),
+        }),
+    }).then(response => response.json())
+    .then(data => {
+        if(data.data !== 1)
+        {
+            localStorage.setItem("vitorias", 0);
+        }
+    });
 
     window.location.reload();
 }
@@ -223,6 +239,7 @@ function checkWord(blocks) {
                     }
                     else
                     {
+                        localStorage.setItem("vitorias", localStorage.getItem("vitorias")+1);
                         const bt_next = document.getElementById("button-next");
                         bt_next.style.display="block";
                     }
@@ -240,6 +257,7 @@ function checkWord(blocks) {
                         }
                         else
                         {
+                            localStorage.setItem("vitorias", 0);
                             const bt_next = document.getElementById("button-next");
                             bt_next.style.display="block";
                         }
@@ -498,8 +516,6 @@ async function obterImagemDoUsuario(username)
 
 async function obterhistoriodousuario(username)
 {
-    //! ARRUMAR 
-    //! ARRUMAR
     await fetch('/get_hist', {
         method: 'POST',
         headers: {
@@ -507,20 +523,12 @@ async function obterhistoriodousuario(username)
         },
         body: JSON.stringify({
             username: username,
-            password: password,
         }),
     })
     .then(response => response.json())
     .then(data => {
-        if(data.data === 1)
-        {
-            localStorage.setItem('username', username);
-            conf_login(username);
-        }
-        else
-        {
-            alert('Login falhou. Verifique suas credenciais.');
-        }
+        localStorage.setItem("best_score", data.best_score);
+        localStorage.setItem("last_5_today", data.last_5_today);
     })
     .catch(error => {
         console.error('Erro ao enviar a solicitação:', error);
@@ -708,17 +716,45 @@ async function hist(event)
 
 async function carregar_hist()
 {
-    const plv_dia = document.getElementById("plv_dia_verif");
-    plv_dia.textContent="Palavra do dia:";
-    const res = await verif_jogado(localStorage.getItem('username'));
-    if (res === 1)
+    const plv_dia = document.getElementById("plv_dia_verifres");
+    const inf_scr =  document.getElementById("maior_sequencia_infres");
+    if( localStorage.getItem("best_score") <2)
     {
-        plv_dia.textContent+="✅" ;  
+        inf_scr.textContent= "A maior sequencia foi "+ localStorage.getItem("best_score") + "x sem perder";
     }
     else
     {
-        plv_dia.textContent+="❌";
+        inf_scr.textContent= "A maior sequencia foram "+ localStorage.getItem("best_score") + "x sem perder";
     }
+    const res = await verif_jogado(localStorage.getItem('username'));
+    if (res === 1)
+    {
+        plv_dia.textContent="A palavra do dia já foi jogada ✅" ;  
+    }
+    else
+    {
+        plv_dia.textContent="A palavra do dia ainda não foi jogada ❌";
+    }
+    const lista_last_5_games = localStorage.getItem("last_5_today").split(",");
+    for (var i = 0; i < lista_last_5_games.length; i+=2) {
+        let numero = parseInt(lista_last_5_games[i]);
+        let palavra = lista_last_5_games[i+1];
+        if (numero === -1)
+            numero = 7;
+
+        var elementId = "bar_hist-" + i/2;
+        var element = document.getElementById(elementId);
+
+        element.style.height = (numero * 100) / 7 + "px";
+        element.setAttribute("data-value", `${(numero * 100) / 7}%`);
+
+        element.setAttribute("title", `Vida usadas: ${numero}`);
+        
+        var elementId = "bar_label-" + i/2;
+        var element = document.getElementById(elementId);
+        element.textContent = palavra;
+    }
+
 
 }
 
