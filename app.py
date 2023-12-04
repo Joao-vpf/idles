@@ -111,6 +111,7 @@ def insert_login_in_database(login, password):
             consulta = "select id from user where username = ?"
             cursor.execute(consulta, (login,))
             user_id = cursor.fetchall()[0][0]
+            
             consulta = "insert into historico(user_id,score_palavra) values(?,0);"
             cursor.execute(consulta, (user_id,))
             return 1
@@ -238,19 +239,6 @@ def  get_historico_from_database(login):
             return -1
         return 1  
 
-def set_historico_from_database(login):
-    with get_db_connection() as connection:
-        if get_username_from_database(login) == 1:
-            cursor = connection.cursor()
-            login=login.lower()
-            consulta = "select id from user where username = ?"
-            cursor.execute(consulta, (login,))
-            user_id = cursor.fetchall()[0][0]
-            consulta = "insert into historico(score_palavra, user_id) values(?,?);"
-            cursor.execute(consulta, (0,user_id))
-            return 1
-    return -1 
-
 
 def set_score_palavra_from_hist(login,score):
     with get_db_connection() as connection:
@@ -286,10 +274,6 @@ def get_score_palavra_from_hist(login):
             return res
         return -1  
 
-
-
-#!return 5 ultimos jogos
-
 def get_last_5_games(login):
     with get_db_connection() as connection:
         if get_username_from_database(login) == -1:
@@ -321,10 +305,6 @@ def get_last_5_games(login):
                 res[i][1] = cursor.fetchall()[0][0]
             return res
         return -1
-
-#!return 5 ultimos jogos
-
-
 
 
 @app.route('/')
@@ -369,7 +349,6 @@ def set_conta():
     username = data.get('username')
     password = data.get('password')
     conf = insert_login_in_database(login=username, password=password)
-    conf = set_historico_from_database(login=username)
     return jsonify({'data': conf})
 
 @app.route('/del_conta', methods=['POST'])
