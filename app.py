@@ -33,7 +33,6 @@ def check_word_from_database(verif):
         consulta = "SELECT palavra FROM palavras WHERE palavra = ?;"
         cursor.execute(consulta, (verif,))
         resultados = cursor.fetchall()
-        #print(resultados)
         if resultados:
             return 1
         return -1
@@ -44,7 +43,6 @@ def get_word_from_database():
         consulta = "SELECT palavra FROM palavras ORDER BY RANDOM() LIMIT 1;"
         cursor.execute(consulta)
         resultados = cursor.fetchall()
-       # print(resultados[0][0].upper())
         return resultados[0][0].upper()
     
 
@@ -63,7 +61,6 @@ def get_today_word_database():
                 palavras_id = resultados[0]
                 consulta = "INSERT INTO palavra_dia(data_palavra, palavras_id) VALUES (date('now'), ?);"
                 cursor.execute(consulta, (palavras_id,))
-                print(resultados[0])
                 connection.commit()
               
         consulta = "SELECT palavra FROM palavras where id in (select palavras_id from palavra_dia where data_palavra = date('now'));"
@@ -81,7 +78,6 @@ def get_username_today_database(login):
         consulta = "SELECT count(*) FROM today WHERE user_id in (select user.id from user where user.username = ?) AND pld_id in (select id from palavra_dia where data_palavra = date('now'));"
         cursor.execute(consulta, (login,))
         resultados = cursor.fetchall()
-        print(resultados[0][0])
         return resultados[0][0]   
 
 def get_login_from_database(login, password):
@@ -190,7 +186,6 @@ def recuperar_imagem(login):
     with get_db_connection() as connection:
         login=login.lower()
         cursor = connection.cursor()
-        #print(login)
         cursor.execute("SELECT png_id FROM user WHERE username = ?;", (login,))
         resultado = cursor.fetchone()
         if resultado:
@@ -324,7 +319,6 @@ def get_last_5_games(login):
                 consulta = "select palavra from palavras where id=?;"
                 cursor.execute(consulta, (palavras_passadas[i],))
                 res[i][1] = cursor.fetchall()[0][0]
-                print(res[i])
             return res
         return -1
 
@@ -419,7 +413,6 @@ def get_all_images():
 
 @app.route('/imagem/<string:username>')
 def get_one_image(username):
-    #print(username)
     imagem = recuperar_imagem(login=username)
     
     if imagem:
@@ -437,7 +430,6 @@ def set_image():
     data = request.get_json()
     id_image = data.get('id_image')
     username = data.get("username")
-    #print(username, " ", id_image)
     conf = set_image_user(login=username, id_img = id_image)
     return {'data': conf}
 

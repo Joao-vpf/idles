@@ -508,6 +508,9 @@ async function obterImagemDoUsuario(username)
         const perfilIcon = document.getElementById('perfilIcon');
         perfilIcon.src = imageUrl;
         perfilIcon.style.borderRadius = '50%';
+        const easter = localStorage.getItem("easteregg")
+        if(easter)
+            easter_eggs(easter);
     } 
     else {
         console.error('Erro ao obter a imagem do usuário:', response.status);
@@ -544,14 +547,9 @@ async function conf_login(username)
     obterhistoriodousuario(username);
     obterImagemDoUsuario(username);
 
-    switch(username)
-    {
-        case "napoleao":
-            onYouTubeIframeAPIReady(true);
-            break;
-        default:
-            break;
-    }
+    easter_eggs(username);
+
+ 
     
     await fetch('/get_all_images')
             .then(response => response.json())
@@ -580,8 +578,6 @@ async function conf_login(username)
 
                     imgElement.addEventListener('click', () => {
                         substituirImagemPerfil(imageUrl, imagem.id);
-                        selectedImage.src = imageUrl;
-                        selectedImage.alt = 'Imagem ' + imagem.id;
                     });
 
                     // Adicionar a miniatura à galeria
@@ -810,7 +806,6 @@ document.addEventListener('click', function (event) {
         if(!menumodoaberto.contains(event.target) && !menumodo.contains(event.target) && !perfilicon.contains(event.target) && !perfilMenu.contains(event.target)  && !configuracoesButton.contains(event.target) && !infoperfil.contains(event.target)) 
         {
             menumodoaberto.style.display = 'none';
-            console.log();
         }
     }
 });
@@ -1021,11 +1016,8 @@ async function alter_img(event) {
                     imgElement.src = imageUrl;
                     imgElement.alt = 'Imagem ' + imagem.id;
                     imgElement.classList.add('thumbnail');
-
                     imgElement.addEventListener('click', () => {
                         substituirImagemPerfil(imageUrl, imagem.id);
-                        selectedImage.src = imageUrl;
-                        selectedImage.alt = 'Imagem ' + imagem.id;
                     });
 
                     // Adicionar a miniatura à galeria
@@ -1044,11 +1036,22 @@ async function alter_img(event) {
 
 async function substituirImagemPerfil(src, imageId) 
 {
+    localStorage.setItem("easteregg", "");
+    easter_eggs("");
     const perfilIcon = document.getElementById('perfilIcon');
     perfilIcon.src = src;  
     perfilIcon.style.borderRadius = '50%';
     perfilIcon.style.height = "40px";
     perfilIcon.style.width = "40px";
+    
+    if(imageId === 15)
+    {
+        easter_eggs("yoda");
+    }
+    if(imageId === 14)
+    {
+        easter_eggs("vader");
+    }
     await fetch('/set_image', {
         method: 'POST',
         headers: {
@@ -1139,6 +1142,54 @@ async function salvar_today()
 }
 
 /* easter eggs */
+async function easter_eggs(tipo) {
+    const perfilIcon = document.getElementById('perfilIcon');
+    perfilIcon.style.borderRadius = '';
+    perfilIcon.style.boxShadow = '';
+    perfilIcon.style.animation = '';
+
+
+    switch (tipo) {
+        case "napoleao":
+            onYouTubeIframeAPIReady(true);
+            break;
+        case "yoda":
+            localStorage.setItem("easteregg","yoda")
+            perfilIcon.style.borderRadius = '50%';
+            perfilIcon.style.boxShadow = '0 0 2.5px #0f0, 0 0 5px #0f0, 0 0 10px #0f0';
+            perfilIcon.style.animation = 'brilho 2.5s infinite';
+
+            // Adicionando a animação usando @keyframes
+            const estiloCSSYoda = document.styleSheets[0];
+            estiloCSSYoda.insertRule(`
+            @keyframes brilho {
+                0% { box-shadow: 0 0 2.5px #0f0, 0 0 5px #0f0, 0 0 10px #0f0; }
+                50% { box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0; }
+                100% { box-shadow: 0 0 2.5px #0f0, 0 0 5px #0f0, 0 0 10px #0f0; }
+            }
+            `, estiloCSSYoda.rules.length);
+            break;
+        case "vader":
+            localStorage.setItem("easteregg","vader")
+            perfilIcon.style.borderRadius = '50%';
+            perfilIcon.style.boxShadow = '0 0 2.5px #f00, 0 0 5px #f00, 0 0 10px #f00';
+            perfilIcon.style.animation = 'brilho 2.5s infinite';
+            
+            // Adicionando a animação usando @keyframes
+            const estiloCSSVader = document.styleSheets[0];
+            estiloCSSVader.insertRule(`
+            @keyframes brilho {
+                0% { box-shadow: 0 0 2.5px #f00, 0 0 5px #f00, 0 0 10px #f00; }
+                50% { box-shadow: 0 0 5px #f00, 0 0 10px #f00, 0 0 15px #f00; }
+                100% { box-shadow: 0 0 2.5px #f00, 0 0 5px #f00, 0 0 10px #f00; }
+            }
+            `, estiloCSSVader.rules.length);
+            break;
+        default:
+            break;
+    }
+}
+
 
 function onYouTubeIframeAPIReady(ok) {
     if (ok === true)
