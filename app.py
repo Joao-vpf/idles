@@ -20,12 +20,13 @@ def load_user(user_id):
     user = User()
     user.id = user_id
     return user
-
+# Função para conectar com o banco de dados e habilitar foreing_key
 def get_db_connection():
     conn =  sqlite3.connect('banco.db')
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
+# Função para verificar se há a palavra no banco de daods
 def check_word_from_database(verif):
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -37,6 +38,7 @@ def check_word_from_database(verif):
             return 1
         return -1
 
+# Função para funçao para pegar uma palavra aleatoria do banco de dados
 def get_word_from_database():
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -45,17 +47,19 @@ def get_word_from_database():
         resultados = cursor.fetchall()
         return resultados[0][0].upper()
     
-
+# Função para gerar pegar uma palavra(a do dia) do banco de dados
 def get_today_word_database():
     with get_db_connection() as connection:
         cursor = connection.cursor()
 
         consulta = "SELECT COUNT(*) FROM palavra_dia WHERE data_palavra = date('now');"
-        resultados = cursor.execute(consulta).fetchone()
+        cursor.execute(consulta)
+        resultados = cursor.fetchone()
 
         if resultados[0] == 0:
             consulta =  "select id from palavras where 0 in (select count(*) from palavra_dia where data_palavra >= strftime('%Y-%m-%d', 'now', '-60 days') and palavras_id = palavras.id) order by random() limit 1;"
-            resultados = cursor.execute(consulta).fetchone()
+            cursor.execute(consulta)
+            resultados = cursor.fetchone()
 
             if resultados:
                 palavras_id = resultados[0]
@@ -70,7 +74,7 @@ def get_today_word_database():
         
         return -1   
     
-    
+# Função para ver se jogou o modo dia dia    
 def get_username_today_database(login):
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -80,6 +84,7 @@ def get_username_today_database(login):
         resultados = cursor.fetchall()
         return resultados[0][0]   
 
+# Função para verificar o login no banco de dados
 def get_login_from_database(login, password):
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -88,7 +93,8 @@ def get_login_from_database(login, password):
         cursor.execute(consulta, (login, password))
         resultados = cursor.fetchall()
         return resultados[0][0]
-    
+
+# Função paraverificar se o user name esta no banco de dados 
 def get_username_from_database(login):
      with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -99,7 +105,8 @@ def get_username_from_database(login):
         if resultados[0][0] == 1:
             return -1
         return 1
-    
+
+# Função para inserir o no banco de dados o novo login(user)
 def insert_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_username_from_database(login) == 1:
@@ -116,7 +123,8 @@ def insert_login_in_database(login, password):
             cursor.execute(consulta, (user_id,))
             return 1
         return -1
-    
+
+# Função para deletar a conta (user)
 def delete_login_in_database(login, password):
     with get_db_connection() as connection:
         if get_login_from_database(login, password) == 1:
@@ -127,6 +135,7 @@ def delete_login_in_database(login, password):
             return 1
         return -1        
 
+# Função para mudar o nome de usuario
 def update_login_username_database(login, password,newlogin):
     with get_db_connection() as connection:
         login=login.lower()
@@ -140,6 +149,7 @@ def update_login_username_database(login, password,newlogin):
             return 2
         return -1
 
+# Função para mudar a senha
 def update_login_senha_database(login, password,newpassword):
     with get_db_connection() as connection:
         if get_login_from_database(login,password) == 1:
@@ -150,6 +160,7 @@ def update_login_senha_database(login, password,newpassword):
             return 1
         return -1
     
+# Função para salvar a quantidade de erros da palavra do dia
 def set_user_today(login, count_erro):
     with get_db_connection() as connection:
         if(get_username_from_database(login) == -1):
@@ -166,6 +177,7 @@ def set_user_today(login, count_erro):
             consulta = "insert into today(count_erro, user_id, pld_id) values(?,?,?)"
             cursor.execute(consulta, (count_erro,id_login,  id_palavra))
 
+# Função para pegar todas as imagens do banco de dados
 def recuperar_todas_imagens():
     with get_db_connection() as connection:
         cursor = connection.cursor()
@@ -183,6 +195,7 @@ def recuperar_todas_imagens():
 
         return imagens
 
+# Função para pre carregar uma imagem
 def recuperar_imagem(login):
     with get_db_connection() as connection:
         login=login.lower()
@@ -200,13 +213,14 @@ def recuperar_imagem(login):
 
                 return imagem
 
+# Função para converte a imagem para formato base64
 def image_to_base64(image):
-    # Converte a imagem para formato base64
     buffered = BytesIO()
     image.save(buffered, format="PNG")
     img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
     return img_str
 
+# Função para pegar usar a imagem escolida do usuario
 def get_user_id_image(login):
     with get_db_connection() as connection:
         login=login.lower()
@@ -214,7 +228,8 @@ def get_user_id_image(login):
         consulta = "select id from user where username=?;"
         cursor.execute(consulta, (login,))
     
-    
+
+# Função para mudar a imagem 
 def set_image_user(login, id_img):
     with get_db_connection() as connection:
         login=login.lower()
@@ -225,7 +240,7 @@ def set_image_user(login, id_img):
         cursor.execute(consulta, (id_img, login))
         return 1
 
-
+# Função para ver se o user tem historico
 def  get_historico_from_database(login):
     with get_db_connection() as connection:
         if get_username_from_database(login) == -1:
@@ -239,7 +254,7 @@ def  get_historico_from_database(login):
             return -1
         return 1  
 
-
+# Função para mudar score no historico
 def set_score_palavra_from_hist(login,score):
     with get_db_connection() as connection:
         if get_historico_from_database(login) == -1:
@@ -259,7 +274,7 @@ def set_score_palavra_from_hist(login,score):
                 return 1
         return -1  
 
-
+# Função para pegar o score no historico
 def get_score_palavra_from_hist(login):
     with get_db_connection() as connection:
         if get_historico_from_database(login) == -1:
@@ -274,6 +289,7 @@ def get_score_palavra_from_hist(login):
             return res
         return -1  
 
+# Função para pegar a quantidade de erro nos ultimos 5 jogos diarios
 def get_last_5_games(login):
     with get_db_connection() as connection:
         if get_username_from_database(login) == -1:
@@ -307,6 +323,8 @@ def get_last_5_games(login):
         return -1
 
 
+
+#daqui para baixo e a conexao entre o python com o javascript
 @app.route('/')
 def index():
     return render_template('main.html')
@@ -444,6 +462,7 @@ def logout():
     return 'Você foi desconectado. <a href="/">Página inicial</a>.'
 
 
+#função para estabelecer um host
 if __name__ == '__main__':
     get_today_word_database()
     #app.run(host='0.0.0.0', port=8080,debug=False)
