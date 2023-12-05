@@ -100,4 +100,4 @@ Agora, você deve estar pronto para usar o seu mavegador. Explore as funcionalid
 
 ### Palavras
 
-É um jogo estilo Wordle e termo, o objetivo é advinhar a a palavra do dia.
+É um jogo estilo Wordle e termo, o objetivo é advinhar a palavra do dia.
