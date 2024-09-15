@@ -6,7 +6,7 @@ O IDLES é um projeto de um site que visa simplificar a busca por jogos "idle", 
 <div>
   
   [<img src="https://avatars.githubusercontent.com/u/98399932?v=4" alt="João Victor Porto" width="100">](https://github.com/Joao-vpf)
-  [<img src="https://avatars.githubusercontent.com/u/101851627?v=4" alt="João Henrique" width="100">](https://github.com/Yattez)
+  [<img src="https://avatars.githubusercontent.com/u/101851627?v=4" alt="João Henrique" width="100">](https://github.com/JoaoHMiranda)
   
 </div>
 
